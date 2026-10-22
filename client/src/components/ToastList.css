@@ -1,0 +1,69 @@
+/* Mobile first: en el teléfono los toasts ocupan todo el ancho */
+.toast-wrap {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  left: 10px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 4px 12px var(--shadow);
+  animation: slideIn 0.3s ease-out;
+  transition: opacity 0.3s;
+}
+
+.toast.leaving {
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.t-ico {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.toast b {
+  font-weight: 600;
+  display: block;
+  font-size: 13px;
+}
+
+.toast span {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+@media (min-width: 769px) {
+  .toast-wrap {
+    bottom: 20px;
+    right: 20px;
+    left: auto;
+  }
+
+  .toast {
+    min-width: 300px;
+  }
+}

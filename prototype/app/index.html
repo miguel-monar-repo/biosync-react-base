@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioSync — Familia conectada desde el teléfono</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0A0C11">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+
+<div class="alert-banner" id="alertBanner">
+  <div class="ab-ico" id="icoAlertBanner"></div>
+  <div class="ab-text">
+    <div class="ab-title" id="alertBannerTitle">Alerta</div>
+    <div class="ab-body" id="alertBannerBody">—</div>
+  </div>
+  <div class="ab-actions" id="alertBannerActions">
+    <button class="ab-btn ab-btn-ok" onclick="confirmImOk()">Estoy bien</button>
+    <button class="ab-btn ab-btn-help" onclick="escalateNow()">Necesito ayuda</button>
+  </div>
+</div>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="5.5" cy="14.5" r="2.3" fill="#4E8FFF"/>
+          <circle cx="14.5" cy="5.5" r="2.3" stroke="#4E8FFF" stroke-width="1.4"/>
+          <line x1="7.2" y1="12.8" x2="12.8" y2="7.2" stroke="#4E8FFF" stroke-width="1.4"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">BioSync</div>
+        <div class="brand-sub">Familia conectada desde el teléfono</div>
+      </div>
+    </div>
+    <div class="device-status">
+      <div class="pill">
+        <span class="ic" id="icoAppPill"></span>
+        <span>Alertas por <b>voz</b> y vibración listas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="audio-bar" id="audioBar">
+    <span class="ic" id="icoAudioBar"></span>
+    <div class="wave" id="earWave"><span></span><span></span><span></span><span></span><span></span></div>
+    <span class="earbuds-text" id="earText">Voz y vibración listas</span>
+    <button class="pill-btn" onclick="speak('Hola, esto es una prueba de audio de BioSync')">Probar voz</button>
+  </div>
+
+  <div class="audio-bar" id="familyBar">
+    <span class="ic" id="icoFamilyBar"></span>
+    <span id="familyStatusText">Sincronización no configurada (ver README)</span>
+    <button class="pill-btn" onclick="joinFamily()">Conectar con mi familia</button>
+  </div>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <h3>Perfiles</h3>
+      <div class="profile-rail">
+        <button class="profile-btn active" data-profile="sport" onclick="setProfile('sport')">
+          <span class="ico" id="icoSportBtn"></span> Deportivo
+        </button>
+        <button class="profile-btn" data-profile="senior" onclick="setProfile('senior')">
+          <span class="ico" id="icoSeniorBtn"></span> Adulto mayor
+        </button>
+        <button class="profile-btn" data-profile="kid" onclick="setProfile('kid')">
+          <span class="ico" id="icoKidBtn"></span> Niño
+        </button>
+      </div>
+      <div class="sidebar-note">
+        Todo lo marcado <span class="real-chip">real</span> usa sensores de verdad de este teléfono: pasos, ubicación, caídas, inactividad y batería. Lo demás son datos de ejemplo para la demo.
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard"></div>
+
+  </div>
+</div>
+
+<div id="toast-wrap"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="config.js"></script>
+<script src="../script.js"></script>
+
+</body>
+</html>
