@@ -1,0 +1,64 @@
+/* Todas las fuentes y colores del proyecto. Si cambias un color, cámbialo aquí. */
+:root {
+  /* ---------- Fuentes ---------- */
+  --font-app: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-landing: 'DM Sans', system-ui, sans-serif;
+  --font-landing-title: 'Space Grotesk', sans-serif;
+
+  /* ---------- Colores de la demo (app) ---------- */
+  --primary: #4E8FFF;
+  --primary-hover: #3B7EE6;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --danger-hover: #DC2626;
+  --white: #FFFFFF;
+
+  --bg-primary: #0A0C11;
+  --bg-secondary: #1F2937;
+  --bg-tertiary: #2D3748;
+  --text-primary: #E0E0E0;
+  --text-secondary: #9CA3AF;
+  --border: #374151;
+
+  /* Versiones transparentes de los colores (fondos suaves) */
+  --primary-04: rgba(78, 143, 255, 0.04);
+  --primary-08: rgba(78, 143, 255, 0.08);
+  --primary-10: rgba(78, 143, 255, 0.1);
+  --primary-15: rgba(78, 143, 255, 0.15);
+  --primary-20: rgba(78, 143, 255, 0.2);
+  --primary-30: rgba(78, 143, 255, 0.3);
+  --primary-40: rgba(78, 143, 255, 0.4);
+  --success-05: rgba(16, 185, 129, 0.05);
+  --success-20: rgba(16, 185, 129, 0.2);
+  --warning-05: rgba(245, 158, 11, 0.05);
+  --warning-20: rgba(245, 158, 11, 0.2);
+  --danger-05: rgba(239, 68, 68, 0.05);
+  --white-20: rgba(255, 255, 255, 0.2);
+  --white-30: rgba(255, 255, 255, 0.3);
+  --overlay: rgba(10, 12, 17, 0.8);
+  --shadow: rgba(0, 0, 0, 0.3);
+
+  /* ---------- Colores de la landing (página de la marca) ---------- */
+  --brand: #2EE6A6;
+  --brand-light: #7FF5CC;
+  --brand-dark: #123A30;
+  --brand-pale: #D5F7EA;
+  --help: #FF5C6C;
+  --help-light: #FF8793;
+  --help-dark: #3B1A20;
+  --help-pale: #FBDADE;
+
+  --landing-bg: #0A0C11;
+  --landing-surface: #11151E;
+  --landing-surface-2: #171C27;
+  --landing-phone: #0F131B;
+  --landing-line: #1D2433;
+  --landing-line-2: #263042;
+  --landing-line-3: #2B3548;
+  --landing-line-4: #3A465C;
+  --landing-text: #E8ECF4;
+  --landing-text-2: #C5CCDA;
+  --landing-text-3: #B4BCCB;
+  --landing-text-4: #8D96A8;
+}

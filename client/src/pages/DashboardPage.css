@@ -1,0 +1,739 @@
+/*
+  Estilos de la demo. MOBILE FIRST:
+  - Lo de arriba de cada bloque es para teléfono.
+  - @media (min-width: 481px) = teléfonos grandes / tablets.
+  - @media (min-width: 769px) = computadora.
+*/
+
+/* ========== APP CONTAINER ========== */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== TOPBAR ========== */
+.topbar {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-name {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.brand-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.device-status {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.pill {
+  background: var(--primary-10);
+  border: 1px solid var(--primary-30);
+  border-radius: 20px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.pill b {
+  font-weight: 600;
+}
+
+/* ========== BARRAS DE AUDIO Y FAMILIA ========== */
+.audio-bar {
+  background: linear-gradient(90deg, var(--primary-08) 0%, var(--primary-04) 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.wave {
+  display: flex;
+  gap: 4px;
+  align-items: flex-end;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.wave.active {
+  opacity: 1;
+}
+
+.wave span {
+  width: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
+.wave span:nth-child(1) { animation-delay: 0s; height: 8px; }
+.wave span:nth-child(2) { animation-delay: 0.1s; height: 12px; }
+.wave span:nth-child(3) { animation-delay: 0.2s; height: 16px; }
+.wave span:nth-child(4) { animation-delay: 0.1s; height: 12px; }
+.wave span:nth-child(5) { animation-delay: 0s; height: 8px; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.earbuds-text {
+  flex: 1;
+  min-width: 150px;
+}
+
+.pill-btn {
+  width: 100%;
+  background: var(--primary);
+  border: none;
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.pill-btn:hover {
+  background: var(--primary-hover);
+}
+
+/* Formulario del código de familia (reemplaza al prompt() del prototipo) */
+.family-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.family-form input {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.family-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.family-form .btn-row {
+  margin-top: 0;
+}
+
+/* ========== LAYOUT ========== */
+.layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 100%;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 12px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.profile-rail {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.profile-btn {
+  flex: 1;
+  min-width: 100px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.profile-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-10);
+}
+
+.profile-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+.sidebar-note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.real-chip {
+  background: var(--primary-20);
+  color: var(--primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.dashboard {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 12px;
+}
+
+/* ========== CABECERA DEL DASHBOARD ========== */
+.dash-head {
+  margin-bottom: 28px;
+}
+
+.dash-eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--primary);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.dash-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.dash-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* ========== GRID Y CARDS ========== */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card.wide {
+  grid-column: 1 / -1;
+}
+
+.card.status-ok {
+  border-color: var(--success);
+  background: var(--success-05);
+}
+
+.card.status-warn {
+  border-color: var(--warning);
+  background: var(--warning-05);
+}
+
+.card.status-danger {
+  border-color: var(--danger);
+  background: var(--danger-05);
+}
+
+.card-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-value {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.card-value small {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-left: 6px;
+  font-weight: 400;
+}
+
+.card-foot {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+/* Variantes de .card-foot (en el prototipo eran estilos en línea) */
+.card-foot.card-hint {
+  margin-bottom: 10px;
+}
+
+.card-foot.meds-note {
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
+.card-foot.fall-note {
+  margin-top: 6px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+}
+
+.progress {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.progress div {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* ========== BOTONES ========== */
+.btn {
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: var(--primary-hover);
+}
+
+.btn.danger {
+  background: var(--danger);
+}
+
+.btn.danger:hover {
+  background: var(--danger-hover);
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.btn.ghost:hover {
+  border-color: var(--primary);
+  background: var(--primary-10);
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.chip-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chip-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-10);
+}
+
+/* ========== FORMULARIOS ========== */
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.check.done {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.msg-compose {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.msg-compose input {
+  width: 100%;
+  flex: 1;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.msg-compose input::placeholder,
+.family-form input::placeholder {
+  color: var(--text-secondary);
+}
+
+.msg-compose input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.quick-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* ========== MAPAS Y UBICACIÓN ========== */
+.map {
+  width: 100%;
+  height: 160px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  margin: 8px 0 12px;
+}
+
+.map.map-small {
+  height: 110px;
+}
+
+.real-map {
+  width: 100%;
+  height: 160px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+.zone {
+  position: absolute;
+  background: var(--primary-15);
+  border: 2px solid var(--primary-40);
+  border-radius: 8px;
+}
+
+.pin {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--primary);
+  border: 3px solid var(--white);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pin.self {
+  background: var(--success);
+}
+
+.label {
+  position: absolute;
+  background: var(--overlay);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  transform: translate(-50%, -50%);
+}
+
+/* ========== MENSAJES ========== */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.li-left {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.li-time {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.chip {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chip.ok {
+  background: var(--success-20);
+  color: var(--success);
+}
+
+.chip.info {
+  background: var(--primary-20);
+  color: var(--primary);
+}
+
+.chip.warn {
+  background: var(--warning-20);
+  color: var(--warning);
+}
+
+/* ========== TELÉFONOS GRANDES / TABLETS ========== */
+@media (min-width: 481px) {
+  .brand-name {
+    font-size: 18px;
+  }
+
+  .sidebar {
+    padding: 16px;
+  }
+
+  .dashboard {
+    padding: 20px 16px;
+  }
+
+  .dash-title {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .card-value {
+    font-size: 32px;
+  }
+
+  .grid {
+    gap: 16px;
+  }
+}
+
+/* ========== COMPUTADORA ========== */
+@media (min-width: 769px) {
+  .topbar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .device-status {
+    width: auto;
+  }
+
+  .audio-bar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .pill-btn {
+    width: auto;
+  }
+
+  .family-form {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .layout {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    width: 220px;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .profile-rail {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .profile-btn {
+    flex: none;
+    min-width: 0;
+  }
+
+  .dashboard {
+    padding: 28px 32px;
+  }
+
+  .dash-title {
+    font-size: 28px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .msg-compose {
+    flex-direction: row;
+  }
+
+  .msg-compose input {
+    width: auto;
+  }
+
+  .quick-replies {
+    flex-direction: row;
+  }
+
+  .chip-btn {
+    width: auto;
+  }
+}

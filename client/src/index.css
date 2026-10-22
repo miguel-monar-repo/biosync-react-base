@@ -1,0 +1,3 @@
+/* Estilos globales: primero las variables, después la base */
+@import './styles/variables.css';
+@import './styles/base.css';

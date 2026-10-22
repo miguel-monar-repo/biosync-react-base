@@ -1,0 +1,101 @@
+.alert-banner {
+  position: fixed;
+  bottom: -120px;
+  left: 0;
+  right: 0;
+  background: var(--danger);
+  color: var(--white);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 1000;
+  transition: bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 8px 32px var(--shadow);
+}
+
+/* Escondido no debe poder recibir clics ni foco */
+.alert-banner:not(.show) {
+  visibility: hidden;
+  transition: bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0s 0.4s;
+}
+
+.alert-banner.show {
+  bottom: 0;
+}
+
+.alert-banner.tone-ok {
+  background: var(--success);
+}
+
+.ab-ico {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.ab-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ab-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.ab-body {
+  font-size: 13px;
+  opacity: 0.95;
+  word-break: break-word;
+}
+
+/* Mobile first: botones uno debajo del otro */
+.ab-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ab-btn {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.ab-btn-ok {
+  background: var(--white);
+  color: var(--danger);
+}
+
+.ab-btn-ok:hover {
+  opacity: 0.9;
+}
+
+.ab-btn-help {
+  background: var(--white-20);
+  color: var(--white);
+  border: 1px solid var(--white-30);
+}
+
+.ab-btn-help:hover {
+  background: var(--white-30);
+}
+
+@media (min-width: 769px) {
+  .ab-actions {
+    flex-direction: row;
+  }
+
+  .ab-btn {
+    width: auto;
+  }
+}

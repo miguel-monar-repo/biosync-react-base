@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BioSync, Página de la Marca</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bs-main-container">
+
+   
+    <nav class="bs-nav">
+        <div class="bs-logo-container">
+            <div class="bs-logo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A0C11" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"></path></svg>
+            </div>
+            <div class="bs-logo-text">BioSync</div>
+        </div>
+        <div class="bs-nav-links">
+            <a href="#descripcion">Quiénes somos</a>
+            <a href="#dedica">A qué nos dedicamos</a>
+            <a href="#origen">Cómo nació</a>
+        </div>
+    </nav>
+
+
+    <header class="bs-hero">
+        <div class="bs-hero-content">
+            <div class="bs-badge">
+                <span class="bs-badge-dot"></span>
+                Página de la Marca
+            </div>
+            <h1 class="bs-hero-title">Familia conectada <span class="bs-highlight">desde el teléfono</span></h1>
+            <p class="bs-hero-desc">BioSync convierte el celular de cada persona en un aviso de cuidado: sabe cómo está y le cuenta a su familia cuando algo no va bien.</p>
+            <div class="bs-hero-actions">
+                <a class="bs-cta" href="https://astounding-mermaid-b8be22.netlify.app/">Probar la demo</a>
+                <a class="bs-btn-outline" href="#dedica">Ver qué hace</a>
+            </div>
+        </div>
+
+        
+        <div class="bs-phone-wrapper">
+            <div class="bs-phone-container">
+                <div class="bs-ring bs-ring-1"></div>
+                <div class="bs-ring bs-ring-2"></div>
+                <div class="bs-ring bs-ring-3"></div>
+                <div class="bs-phone">
+                    <div class="bs-phone-header">
+                        <div class="bs-phone-title">BioSync</div>
+                        <div class="bs-phone-status-dot" id="phoneStatusDot"></div>
+                    </div>
+                    <div class="bs-phone-subtitle">Alertas por <span class="bs-highlight">voz</span> y vibración listas</div>
+                    <div class="bs-phone-tags">
+                        <div class="bs-tag active" data-profile="deportivo">Deportivo</div>
+                        <div class="bs-tag" data-profile="adulto">Adulto mayor</div>
+                        <div class="bs-tag" data-profile="nino">Niño</div>
+                    </div>
+                    <div class="bs-phone-sensors">
+                        <div class="bs-sensor-item"><span>Pasos</span><span class="bs-highlight" id="sensorPasos">en vivo</span></div>
+                        <div class="bs-sensor-item"><span>Ubicación</span><span class="bs-highlight">en vivo</span></div>
+                        <div class="bs-sensor-item"><span>Caídas</span><span class="bs-highlight" id="sensorCaidas">vigilando</span></div>
+                        <div class="bs-sensor-item"><span>Batería</span><span class="bs-highlight">en vivo</span></div>
+                    </div>
+                    <button type="button" class="bs-phone-btn-ok" id="btnEstoyBien">Estoy bien</button>
+                    <button type="button" class="bs-phone-btn-help" id="btnAyuda">Necesito ayuda</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+   
+    <section id="descripcion" class="bs-section-desc">
+        <div class="bs-container bs-desc-grid">
+            <div class="bs-section-header">
+                <div class="bs-section-tag">01 · Quiénes somos</div>
+                <h2 class="bs-section-title">El emprendimiento</h2>
+            </div>
+            <div class="bs-desc-text">
+                <p>BioSync es una aplicación que mantiene a las familias conectadas sin que nadie tenga que llamar cada rato para preguntar “¿estás bien?”.</p>
+                <p>Funciona con lo que ya llevamos en el bolsillo: los sensores del teléfono registran pasos, ubicación, caídas, inactividad y batería, y la app transforma esa información en algo que la familia entiende de un vistazo.</p>
+                <p class="bs-desc-quote">Sin aparatos extra. Sin complicaciones. Solo el teléfono.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="dedica" class="bs-container bs-dedica-section">
+        <div class="bs-dedica-intro">
+            <div class="bs-section-tag">02 · A qué nos dedicamos</div>
+            <h2 class="bs-section-title">Cuidamos a quien más quieres, a la distancia</h2>
+            <p class="bs-dedica-desc">Un mismo teléfono, tres formas de cuidar. BioSync se adapta a cada etapa de la vida con perfiles pensados para cada persona.</p>
+        </div>
+
+        <div class="bs-cards-grid">
+            <div class="bs-card">
+                <div class="bs-card-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 4 8-9"></path><path d="M15 7h5v5"></path></svg>
+                </div>
+                <h3>Deportivo</h3>
+                <p>Para quien se mueve: sigue los pasos y la actividad, y avisa si algo se detiene en medio del entrenamiento.</p>
+            </div>
+            <div class="bs-card">
+                <div class="bs-card-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"></path></svg>
+                </div>
+                <h3>Adulto mayor</h3>
+                <p>Detecta caídas y largos periodos de inactividad para que la familia se entere a tiempo, aunque estén lejos.</p>
+            </div>
+            <div class="bs-card">
+                <div class="bs-card-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+                </div>
+                <h3>Niño</h3>
+                <p>Muestra dónde está y cómo está, para que mamá y papá estén tranquilos mientras ellos juegan y exploran.</p>
+            </div>
+        </div>
+
+        <div class="bs-features-block">
+            <div class="bs-features-title">Lo que vigila, con sensores reales</div>
+            <div class="bs-pill-list">
+                <div class="bs-pill"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16l4-4 3 3 5-6 4 4"></path></svg>Pasos</div>
+                <div class="bs-pill"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>Ubicación</div>
+                <div class="bs-pill"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v13m0 0l-4-4m4 4l4-4"></path></svg>Caídas</div>
+                <div class="bs-pill"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Inactividad</div>
+                <div class="bs-pill"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2EE6A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="16" height="9" rx="2"></rect><path d="M21 11v3"></path></svg>Batería</div>
+            </div>
+        </div>
+
+        <div class="bs-alert-boxes">
+            <div class="bs-alert-box bs-alert-ok">
+                <div class="bs-alert-heading">“Estoy bien”</div>
+                <p>Un toque para decirle a la familia que todo está en orden.</p>
+            </div>
+            <div class="bs-alert-box bs-alert-help">
+                <div class="bs-alert-heading">“Necesito ayuda”</div>
+                <p>Un toque para pedir ayuda, con alertas por voz y vibración que no se pasan por alto.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="origen" class="bs-origin-section">
+        <div class="bs-container bs-origin-grid">
+            <div class="bs-section-intro">
+                <div class="bs-section-tag">03 · Cómo nació</div>
+                <h2 class="bs-section-title">De una preocupación a una app</h2>
+            </div>
+            <div class="bs-steps-grid">
+                <div class="bs-step-card">
+                    <div class="bs-step-num">01</div>
+                    <h3>La idea</h3>
+                    <p>Nació de una pregunta: ¿y si el teléfono pudiera avisarle a la familia cuando algo no va bien? La idea fue de Miguel y Paula, quienes la convirtieron en BioSync.</p>
+                </div>
+                <div class="bs-step-card">
+                    <div class="bs-step-num">02</div>
+                    <h3>La primera demo</h3>
+                    <p>Construimos una versión web que ya usa los sensores reales del teléfono (pasos, ubicación, caídas, inactividad y batería) y la probamos con tres perfiles: deportivo, adulto mayor y niño.</p>
+                </div>
+                <div class="bs-step-card">
+                    <div class="bs-step-num">03</div>
+                    <h3>El siguiente paso</h3>
+                    <p>Conectar a cada persona con su familia: que las alertas y el “estoy bien” lleguen directo a los teléfonos de quienes los cuidan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="bs-footer">
+        <div class="bs-container bs-footer-cta">
+            <h2>Cuidar a tu familia cabe en un teléfono</h2>
+            <a class="bs-cta" href="https://astounding-mermaid-b8be22.netlify.app/">Probar BioSync</a>
+        </div>
+        <div class="bs-container bs-footer-bar">
+            <div>BioSync · Familia conectada desde el teléfono</div>
+            <div>Página de la Marca</div>
+        </div>
+    </footer>
+
+</div>
+
+
+<script src="script.js"></script>
+</body>
+</html>

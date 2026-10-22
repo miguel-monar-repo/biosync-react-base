@@ -1,0 +1,699 @@
+/*
+  Estilos de la landing (página de la marca). MOBILE FIRST:
+  lo de arriba es para teléfono y @media (min-width: 768px) agranda textos y espacios.
+  Todas las clases empiezan con "bs-" para no chocar con las de la demo.
+*/
+
+@keyframes bs-pulse {
+  0% { transform: scale(0.7); opacity: 0.7; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+@keyframes bs-float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.bs-main-container {
+  width: 100%;
+  background: var(--landing-bg);
+  color: var(--landing-text);
+  font-family: var(--font-landing);
+  overflow: hidden;
+}
+
+.bs-main-container a {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+.bs-main-container a:hover {
+  color: var(--brand-light);
+}
+
+.bs-container {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.bs-highlight {
+  color: var(--brand);
+}
+
+/* ========== NAVEGACIÓN ========== */
+.bs-nav {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 20px 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.bs-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bs-logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--brand);
+  color: var(--landing-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bs-logo-text {
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+
+.bs-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bs-main-container .bs-nav-links a {
+  color: var(--landing-text-2);
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+/* ========== HERO ========== */
+.bs-hero {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 56px;
+}
+
+.bs-hero-content {
+  flex: 1 1 480px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.bs-badge {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--landing-line-2);
+  background: var(--landing-surface);
+  font-size: 14px;
+  color: var(--landing-text-2);
+}
+
+.bs-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand);
+  display: inline-block;
+}
+
+.bs-hero-title {
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+
+.bs-hero-desc {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--landing-text-3);
+  max-width: 520px;
+}
+
+.bs-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.bs-main-container .bs-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  min-height: 52px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: var(--landing-bg);
+  font-weight: 700;
+  font-size: 17px;
+  transition: transform 0.2s;
+}
+
+.bs-main-container .bs-cta:hover {
+  transform: translateY(-2px);
+  color: var(--landing-bg);
+}
+
+.bs-main-container .bs-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 16px 28px;
+  min-height: 52px;
+  border-radius: 999px;
+  border: 1px solid var(--landing-line-4);
+  color: var(--landing-text);
+  font-weight: 500;
+  font-size: 17px;
+}
+
+/* ========== TELÉFONO DE MUESTRA ========== */
+.bs-phone-wrapper {
+  flex: 1 1 340px;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.bs-phone-container {
+  position: relative;
+  width: 340px;
+  max-width: 100%;
+  height: 640px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bs-ring {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  border: 2px solid var(--brand);
+  animation: bs-pulse 4s ease-out infinite;
+}
+
+.bs-ring-2 { animation-delay: 1.3s; }
+.bs-ring-3 { animation-delay: 2.6s; }
+
+.bs-phone {
+  position: relative;
+  width: 290px;
+  height: 590px;
+  border-radius: 44px;
+  border: 2px solid var(--landing-line-3);
+  background: var(--landing-phone);
+  padding: 28px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: bs-float 6s ease-in-out infinite;
+}
+
+.bs-phone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bs-phone-title {
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.bs-phone-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--brand);
+  transition: background 0.3s ease;
+}
+
+.bs-phone-status-dot.help {
+  background: var(--help);
+}
+
+.bs-phone-subtitle {
+  font-size: 13px;
+  color: var(--landing-text-3);
+  line-height: 1.4;
+}
+
+.bs-phone-tags {
+  display: flex;
+  gap: 6px;
+}
+
+.bs-tag {
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--landing-line-3);
+  background: transparent;
+  color: var(--landing-text-3);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bs-tag.active {
+  background: var(--brand);
+  color: var(--landing-bg);
+  font-weight: 700;
+  border-color: var(--brand);
+}
+
+.bs-phone-sensors {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+
+.bs-sensor-item {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--landing-surface-2);
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bs-phone-btn-ok,
+.bs-phone-btn-help {
+  border: 0;
+  min-height: 48px;
+  border-radius: 16px;
+  color: var(--landing-bg);
+  font-family: var(--font-landing);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.bs-phone-btn-ok {
+  background: var(--brand);
+}
+
+.bs-phone-btn-help {
+  background: var(--help);
+}
+
+.bs-phone-btn-ok:active,
+.bs-phone-btn-help:active {
+  opacity: 0.8;
+}
+
+/* ========== 01 · QUIÉNES SOMOS ========== */
+.bs-section-desc {
+  background: var(--landing-surface);
+  border-top: 1px solid var(--landing-line);
+  border-bottom: 1px solid var(--landing-line);
+}
+
+.bs-desc-grid {
+  padding: 64px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+}
+
+.bs-section-header {
+  flex: 1 1 320px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bs-section-tag {
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--brand);
+  font-weight: 700;
+}
+
+.bs-section-title {
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+
+.bs-desc-text {
+  flex: 2 1 480px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--landing-text-2);
+}
+
+.bs-desc-quote {
+  color: var(--white);
+  font-family: var(--font-landing-title);
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+/* ========== 02 · A QUÉ NOS DEDICAMOS ========== */
+.bs-dedica-section {
+  padding: 64px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.bs-dedica-intro,
+.bs-section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 640px;
+}
+
+.bs-dedica-desc {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--landing-text-3);
+}
+
+.bs-cards-grid,
+.bs-steps-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.bs-card {
+  flex: 1 1 300px;
+  min-width: 0;
+  padding: 24px;
+  border-radius: 28px;
+  background: var(--landing-surface);
+  border: 1px solid var(--landing-line);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bs-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--brand-dark);
+  color: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bs-card h3 {
+  font-family: var(--font-landing-title);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.bs-card p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--landing-text-3);
+}
+
+.bs-features-block {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bs-features-title {
+  font-family: var(--font-landing-title);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.bs-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.bs-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: 999px;
+  background: var(--landing-surface-2);
+  font-size: 16px;
+}
+
+.bs-pill svg {
+  color: var(--brand);
+}
+
+.bs-alert-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.bs-alert-box {
+  flex: 1 1 420px;
+  min-width: 0;
+  padding: 28px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bs-alert-heading {
+  font-family: var(--font-landing-title);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.bs-alert-box p {
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.bs-alert-ok {
+  background: var(--brand-dark);
+}
+
+.bs-alert-ok .bs-alert-heading {
+  color: var(--brand);
+}
+
+.bs-alert-ok p {
+  color: var(--brand-pale);
+}
+
+.bs-alert-help {
+  background: var(--help-dark);
+}
+
+.bs-alert-help .bs-alert-heading {
+  color: var(--help-light);
+}
+
+.bs-alert-help p {
+  color: var(--help-pale);
+}
+
+/* ========== 03 · CÓMO NACIÓ ========== */
+.bs-origin-section {
+  background: var(--landing-surface);
+  border-top: 1px solid var(--landing-line);
+}
+
+.bs-origin-grid {
+  padding: 64px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.bs-step-card {
+  flex: 1 1 300px;
+  min-width: 0;
+  padding: 24px;
+  border-radius: 28px;
+  background: var(--landing-bg);
+  border: 1px solid var(--landing-line);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bs-step-num {
+  font-family: var(--font-landing-title);
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--brand);
+  line-height: 1;
+}
+
+.bs-step-card h3 {
+  font-family: var(--font-landing-title);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.bs-step-card p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--landing-text-3);
+}
+
+/* ========== FOOTER ========== */
+.bs-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.bs-footer-cta {
+  padding: 64px 20px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
+}
+
+.bs-footer-cta h2 {
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.05;
+  letter-spacing: -1px;
+  max-width: 760px;
+}
+
+.bs-footer-bar {
+  padding: 24px 20px 40px;
+  border-top: 1px solid var(--landing-line);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--landing-text-4);
+}
+
+/* ========== TABLET Y COMPUTADORA: tamaños originales del prototipo ========== */
+@media (min-width: 768px) {
+  .bs-nav {
+    padding: 28px 24px 0;
+  }
+
+  .bs-hero {
+    padding: 64px 24px 96px;
+  }
+
+  .bs-hero-title {
+    font-size: 76px;
+    letter-spacing: -3px;
+  }
+
+  .bs-hero-desc {
+    font-size: 20px;
+  }
+
+  .bs-desc-grid,
+  .bs-dedica-section,
+  .bs-origin-grid {
+    padding: 96px 24px;
+  }
+
+  .bs-section-title {
+    font-size: 48px;
+    letter-spacing: -1.5px;
+  }
+
+  .bs-desc-text {
+    font-size: 20px;
+  }
+
+  .bs-desc-quote {
+    font-size: 28px;
+  }
+
+  .bs-dedica-desc {
+    font-size: 19px;
+  }
+
+  .bs-card,
+  .bs-step-card {
+    padding: 32px;
+  }
+
+  .bs-card h3 {
+    font-size: 28px;
+  }
+
+  .bs-features-title {
+    font-size: 24px;
+  }
+
+  .bs-alert-box {
+    padding: 36px;
+  }
+
+  .bs-alert-heading {
+    font-size: 32px;
+  }
+
+  .bs-step-num {
+    font-size: 56px;
+  }
+
+  .bs-step-card h3 {
+    font-size: 26px;
+  }
+
+  .bs-footer-cta {
+    padding: 96px 24px 56px;
+  }
+
+  .bs-footer-cta h2 {
+    font-size: 56px;
+    letter-spacing: -2px;
+  }
+
+  .bs-footer-bar {
+    padding: 24px 24px 40px;
+  }
+}
+
+/* Si la persona pidió menos animaciones en su sistema, se apagan */
+@media (prefers-reduced-motion: reduce) {
+  .bs-ring,
+  .bs-phone {
+    animation: none;
+  }
+}

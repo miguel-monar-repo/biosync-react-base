@@ -1,0 +1,26 @@
+/* Reset y estilos base que comparten todas las páginas */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-app);
+  font-size: 14px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+@media (min-width: 481px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+/* Los botones e inputs no heredan la fuente por defecto */
+button,
+input {
+  font-family: inherit;
+}
