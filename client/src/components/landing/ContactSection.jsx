@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { avisos, PLANES, reglas } from '../../../../shared/validacionContacto.js'
+import { avisos, PLANES, reglas } from '../../../../shared/validacionContacto.mjs'
 import './ContactSection.css'
 
 // Sección de contacto de la landing: texto a la izquierda y tarjeta con el formulario.
-// Valida con las mismas reglas que el servidor (shared/validacionContacto.js) y envía a POST /api/contact.
+// Valida con las mismas reglas que el servidor (shared/validacionContacto.mjs) y envía a POST /api/contact.
 const CAMPOS = ['nombre', 'email', 'celular', 'planInteres', 'mensaje', 'consentimiento']
 const ERROR_ENVIO = 'No pudimos enviar tu mensaje. Revisa tu conexión e inténtalo de nuevo.'
 const VALORES_INICIALES = {
@@ -21,7 +21,9 @@ function ContactSection({
   titulo = 'Hablemos',
   texto = '¿Tienes dudas sobre nuestros planes? Déjanos tus datos y un mensaje, y te contactaremos pronto.',
   politicaUrl = '/politica-datos',
-  apiUrl = '/api/contact',
+  // En Vercel la API es otro proyecto: VITE_API_URL tiene su dirección.
+  // En local va vacía y '/api/contact' pasa por el proxy de Vite.
+  apiUrl = `${import.meta.env.VITE_API_URL || ''}/api/contact`,
 }) {
   // useId() crea ids únicos para que no choquen con otros de la página
   const id = useId()
