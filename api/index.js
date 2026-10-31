@@ -8,7 +8,7 @@
 import { createHash } from 'node:crypto'
 import express from 'express'
 import { MongoClient } from 'mongodb'
-import { validarContacto } from '../shared/validacionContacto.js'
+import { validarContacto } from '../shared/validacionContacto.mjs'
 
 const EN_VERCEL = Boolean(process.env.VERCEL) // Vercel define VERCEL=1 automáticamente
 const PORT = process.env.PORT || 4000

@@ -22,7 +22,7 @@ Explica siempre **en español y de forma sencilla**: qué se cambió, por qué y
 Comandos (dentro de `client/`): `npm run dev`, `npm run build`, `npm run lint`.
 Comandos (dentro de `api/`): `npm run dev` (lee el `.env` de la raíz, puerto 4000).
 
-- `shared/validacionContacto.js`: reglas del formulario, las usan el navegador y la API.
+- `shared/validacionContacto.mjs`: reglas del formulario, las usan el navegador y la API.
 - En local, Vite reenvía `/api` a `localhost:4000`. En Vercel la landing usa `VITE_API_URL`
   y la API acepta solo los dominios de `FRONTEND_URL` (CORS).
 
