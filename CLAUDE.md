@@ -15,22 +15,27 @@ Explica siempre **en español y de forma sencilla**: qué se cambió, por qué y
 | Parte        | Tecnología                         | Estado          |
 |--------------|------------------------------------|-----------------|
 | Frontend     | React + Vite (JavaScript) en `client/` | Migrado         |
-| Backend      | Express en `api/`                  | Más adelante    |
+| Backend      | Express en `api/` + MongoDB Atlas  | Formulario de contacto (`POST /api/contact`) |
 | Tiempo real  | Firebase (Firestore)               | Migrado (opcional, vía `.env`) |
-| Deploy       | Vercel                             | Más adelante    |
+| Deploy       | Vercel: 2 proyectos del mismo repo | Landing (`client/`) y API (`api/`) |
 
 Comandos (dentro de `client/`): `npm run dev`, `npm run build`, `npm run lint`.
+Comandos (dentro de `api/`): `npm run dev` (lee el `.env` de la raíz, puerto 4000).
+
+- `shared/validacionContacto.mjs`: reglas del formulario, las usan el navegador y la API.
+- En local, Vite reenvía `/api` a `localhost:4000`. En Vercel la landing usa `VITE_API_URL`
+  y la API acepta solo los dominios de `FRONTEND_URL` (CORS).
 
 ## Estructura de `client/src`
 
 ```text
 src/
 ├── main.jsx       punto de entrada, monta <App /> dentro de <BrowserRouter>
-├── App.jsx        rutas: "/" → LandingPage, "/app" → DashboardPage
-├── pages/         pantallas completas + su CSS (LandingPage, DashboardPage)
+├── App.jsx        rutas: "/" → LandingPage, "/app" → DashboardPage, "/politica-datos" → PrivacyPage
+├── pages/         pantallas completas + su CSS (LandingPage, DashboardPage, PrivacyPage)
 ├── components/    piezas reutilizables (Icon, AlertBanner, ToastList, Topbar...)
 │   ├── profiles/  los 3 perfiles de la demo (Sport, Senior, Kid)
-│   └── landing/   piezas de la landing (PhoneMockup)
+│   └── landing/   piezas de la landing (PhoneMockup, ContactSection)
 ├── hooks/         lógica de sensores (useStepCounter, useFallDetection, useRealLocation...)
 ├── context/       estado compartido: Toast, AlertBanner y Family
 │                  (XContext.js = contexto + hook useX, XProvider.jsx = componente)
