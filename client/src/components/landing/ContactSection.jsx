@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { avisos, PLANES, reglas } from '../../../../shared/validacionContacto.js'
+import { avisos, PLANES, reglas } from '../../../../shared/validacionContacto.mjs'
 import './ContactSection.css'
 
 // Sección de contacto de la landing: texto a la izquierda y tarjeta con el formulario.
-// Valida con las mismas reglas que el servidor (shared/validacionContacto.js) y envía a POST /api/contact.
+// Valida con las mismas reglas que el servidor (shared/validacionContacto.mjs) y envía a POST /api/contact.
 const CAMPOS = ['nombre', 'email', 'celular', 'planInteres', 'mensaje', 'consentimiento']
 const ERROR_ENVIO = 'No pudimos enviar tu mensaje. Revisa tu conexión e inténtalo de nuevo.'
 const VALORES_INICIALES = {

@@ -1,5 +1,7 @@
 // Reglas del formulario de contacto, compartidas por el navegador (client/) y el servidor (api/).
 // Cada regla recibe el valor tal como llega y devuelve { valor limpio, error }.
+// Es .mjs (y no .js) porque shared/ no tiene package.json: así Node sabe que usa import/export.
+// Con .js, Vercel lo trata como CommonJS y la API falla al arrancar.
 export const PLANES = ['Niño', 'Adulto mayor', 'Deportivo', 'Familiar', 'Aún no sé']
 
 const texto = (valor) => (typeof valor === 'string' ? valor.normalize('NFC') : '')
