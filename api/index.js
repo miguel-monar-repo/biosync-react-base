@@ -52,7 +52,8 @@ app.post('/api/contact', limitarEnvios, async (req, res) => {
     await coleccion.insertOne({ ...datos, atendido: false, creadoEn: new Date() })
     res.status(201).json({ mensaje: 'Mensaje recibido' })
   } catch (error) {
-    console.error(error)
+    // Solo el mensaje: el error completo de MongoDB puede incluir los datos de la persona
+    console.error('No se pudo guardar el contacto:', error.message)
     res.status(500).json({ error: 'No se pudo guardar el mensaje' })
   }
 })

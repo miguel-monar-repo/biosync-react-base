@@ -21,10 +21,10 @@ export const reglas = {
   },
 
   celular(valor) {
-    // Se permiten espacios al escribir, pero se guardan solo los dígitos
+    // Celular de Ecuador: 10 dígitos. Se permiten espacios al escribir, pero se guardan solo los dígitos
     const limpio = texto(valor).replace(/\s/g, '')
-    const ok = /^3\d{9}$/.test(limpio)
-    return { valor: limpio, error: ok ? null : 'El celular debe tener 10 dígitos y empezar por 3.' }
+    const ok = /^\d{10}$/.test(limpio)
+    return { valor: limpio, error: ok ? null : 'El celular debe tener 10 dígitos.' }
   },
 
   planInteres(valor) {
@@ -44,6 +44,16 @@ export const reglas = {
   consentimiento(valor) {
     const ok = valor === true
     return { valor: ok, error: ok ? null : 'Necesitamos tu autorización para poder contactarte.' }
+  },
+}
+
+// Recomendaciones: se muestran en el formulario pero NO impiden enviarlo (el servidor no las revisa).
+// Cada una recibe el valor y devuelve el texto del aviso, o null si no hay nada que recomendar.
+export const avisos = {
+  celular(valor) {
+    const limpio = texto(valor).replace(/\s/g, '')
+    if (limpio === '' || limpio.startsWith('0')) return null
+    return 'El celular debería empezar con 0 (por ejemplo 099 123 4567).'
   },
 }
 

@@ -160,6 +160,17 @@
   display: none;
 }
 
+/* Recomendación: no es un error, solo un consejo (no bloquea el envío) */
+.seccion-contacto .campo-aviso {
+  color: var(--warning);
+  font-size: 0.875rem;
+  margin: 6px 0 0;
+}
+
+.seccion-contacto .campo-aviso:empty {
+  display: none;
+}
+
 .seccion-contacto .campo-pie {
   display: flex;
   justify-content: space-between;

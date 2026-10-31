@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { PLANES, reglas } from '../../../../shared/validacionContacto.js'
+import { avisos, PLANES, reglas } from '../../../../shared/validacionContacto.js'
 import './ContactSection.css'
 
 // Sección de contacto de la landing: texto a la izquierda y tarjeta con el formulario.
@@ -27,6 +27,8 @@ function ContactSection({
   const id = useId()
   const [valores, setValores] = useState(VALORES_INICIALES)
   const [errores, setErrores] = useState({})
+  // Recomendaciones que no bloquean el envío (por ahora solo la del celular)
+  const [recomendaciones, setRecomendaciones] = useState({})
   const [errorGeneral, setErrorGeneral] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [nombreEnviado, setNombreEnviado] = useState(null)
@@ -52,6 +54,9 @@ function ContactSection({
   function validarCampo(campo, valor) {
     const { error } = reglas[campo](valor)
     setErrores((prev) => ({ ...prev, [campo]: error }))
+    if (avisos[campo]) {
+      setRecomendaciones((prev) => ({ ...prev, [campo]: avisos[campo](valor) }))
+    }
     return error
   }
 
@@ -89,6 +94,7 @@ function ContactSection({
       if (error) nuevos[campo] = error
     }
     setErrores(nuevos)
+    setRecomendaciones({ celular: avisos.celular(valores.celular) })
     if (Object.keys(nuevos).length > 0) {
       enfocarPrimerError(nuevos)
       return
@@ -124,6 +130,7 @@ function ContactSection({
     volviendo.current = true
     setValores(VALORES_INICIALES)
     setErrores({})
+    setRecomendaciones({})
     setErrorGeneral('')
     setNombreEnviado(null)
   }
@@ -141,6 +148,13 @@ function ContactSection({
   const error = (campo) => (
     <p className="campo-error" id={`${id}-error-${campo}`}>
       {errores[campo]}
+    </p>
+  )
+
+  // La recomendación solo se muestra si el campo no tiene un error
+  const recomendacion = (campo) => (
+    <p className="campo-aviso" id={`${id}-aviso-${campo}`}>
+      {errores[campo] ? null : recomendaciones[campo]}
     </p>
   )
 
@@ -202,12 +216,14 @@ function ContactSection({
                     type="tel"
                     autoComplete="tel-national"
                     inputMode="numeric"
-                    placeholder="300 123 4567"
+                    placeholder="099 123 4567"
                     maxLength={14}
                     required
+                    aria-describedby={`${id}-error-celular ${id}-aviso-celular`}
                     value={valores.celular}
                   />
                   {error('celular')}
+                  {recomendacion('celular')}
                 </div>
 
                 <div className="campo">
