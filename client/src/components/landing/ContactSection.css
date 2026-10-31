@@ -1,0 +1,308 @@
+/*
+  Sección de contacto de la landing. MOBILE FIRST: una columna en teléfono,
+  dos columnas desde 900px. Todo va dentro de .seccion-contacto para no afectar al resto.
+  Los colores salen de styles/variables.css (los de la landing).
+*/
+
+.seccion-contacto {
+  background: var(--landing-bg);
+  color: var(--landing-text);
+  font-family: var(--font-landing);
+  line-height: 1.5;
+  border-top: 1px solid var(--landing-line);
+}
+
+.seccion-contacto *,
+.seccion-contacto *::before,
+.seccion-contacto *::after {
+  box-sizing: border-box;
+}
+
+.seccion-contacto h2,
+.seccion-contacto h3 {
+  font-family: var(--font-landing-title);
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+}
+
+.seccion-contacto a {
+  color: var(--brand);
+}
+
+/* ---------- Layout (mobile first: una columna) ---------- */
+
+.seccion-contacto .contacto {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 16px;
+  display: grid;
+  gap: 32px;
+}
+
+.seccion-contacto .contacto-titulo {
+  font-size: clamp(2.25rem, 8vw, 3.5rem);
+}
+
+.seccion-contacto .contacto-intro p {
+  color: var(--landing-text-4);
+  font-size: 1.125rem;
+  max-width: 44ch;
+  margin: 0;
+}
+
+.seccion-contacto .tarjeta {
+  background: var(--landing-surface);
+  border: 1px solid var(--landing-line);
+  border-radius: 20px;
+  padding: 24px 16px;
+}
+
+.seccion-contacto .tarjeta h3 {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .seccion-contacto .tarjeta {
+    padding: 32px;
+  }
+}
+
+/* Escritorio: texto a la izquierda, formulario a la derecha */
+@media (min-width: 900px) {
+  .seccion-contacto .contacto {
+    grid-template-columns: 1fr 1.15fr;
+    align-items: start;
+    gap: 64px;
+    padding: 96px 32px;
+  }
+
+  .seccion-contacto .contacto-intro {
+    position: sticky;
+    top: 96px;
+  }
+}
+
+/* ---------- Campos ---------- */
+
+.seccion-contacto .campo {
+  margin-bottom: 20px;
+}
+
+.seccion-contacto .campo label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.seccion-contacto .opcional {
+  color: var(--landing-text-4);
+  font-weight: 400;
+}
+
+.seccion-contacto .campo input[type='text'],
+.seccion-contacto .campo input[type='email'],
+.seccion-contacto .campo input[type='tel'],
+.seccion-contacto .campo select,
+.seccion-contacto .campo textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  background: var(--landing-field);
+  color: var(--landing-text);
+  border: 1.5px solid var(--landing-line-3);
+  border-radius: 10px;
+  font: inherit;
+}
+
+.seccion-contacto .campo textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.seccion-contacto .campo select {
+  appearance: none;
+  padding-right: 40px;
+  /* Flechita del select dibujada con SVG */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa4b5' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.seccion-contacto .campo select option {
+  background: var(--landing-surface);
+  color: var(--landing-text);
+}
+
+.seccion-contacto .campo ::placeholder {
+  color: var(--landing-placeholder);
+}
+
+.seccion-contacto .campo input:focus,
+.seccion-contacto .campo select:focus,
+.seccion-contacto .campo textarea:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-20);
+}
+
+/* Debe ir DESPUÉS de las reglas anteriores y con :is() para ganar en especificidad */
+.seccion-contacto .campo :is(input, select, textarea)[aria-invalid='true'] {
+  border-color: var(--help);
+}
+
+.seccion-contacto .campo-error {
+  color: var(--help);
+  font-size: 0.875rem;
+  margin: 6px 0 0;
+}
+
+.seccion-contacto .campo-error:empty {
+  display: none;
+}
+
+/* Recomendación: no es un error, solo un consejo (no bloquea el envío) */
+.seccion-contacto .campo-aviso {
+  color: var(--warning);
+  font-size: 0.875rem;
+  margin: 6px 0 0;
+}
+
+.seccion-contacto .campo-aviso:empty {
+  display: none;
+}
+
+.seccion-contacto .campo-pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.seccion-contacto .contador {
+  margin: 6px 0 0 auto;
+  color: var(--landing-text-4);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* ---------- Casilla de autorización ---------- */
+
+.seccion-contacto .check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.seccion-contacto .check input[type='checkbox'] {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin: 12px 0 0;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+
+.seccion-contacto .campo .check label {
+  font-weight: 400;
+  margin: 0;
+  padding: 10px 0;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.seccion-contacto .check input[aria-invalid='true'] {
+  outline: 2px solid var(--help);
+  outline-offset: 2px;
+}
+
+.seccion-contacto .check input:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Campo trampa: fuera de la pantalla, invisible para personas */
+.seccion-contacto .trampa {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ---------- Mensajes y botón ---------- */
+
+.seccion-contacto .error-general {
+  background: var(--help-10);
+  border: 1px solid var(--help);
+  color: var(--help-pale);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin: 0 0 16px;
+}
+
+.seccion-contacto .boton {
+  width: 100%;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: var(--brand);
+  color: var(--landing-bg);
+  border: 0;
+  border-radius: 12px;
+  font-family: var(--font-landing-title);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.seccion-contacto .boton:hover {
+  background: var(--brand-light);
+}
+
+.seccion-contacto .boton:focus-visible {
+  outline: 3px solid var(--landing-text);
+  outline-offset: 3px;
+}
+
+.seccion-contacto .boton:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+.seccion-contacto .spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar-contacto 0.7s linear infinite;
+}
+
+.seccion-contacto .boton.enviando .spinner {
+  display: inline-block;
+}
+
+@keyframes girar-contacto {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seccion-contacto .spinner {
+    animation-duration: 2s;
+  }
+}
+
+.seccion-contacto .exito h3:focus {
+  outline: none;
+}
+
+.seccion-contacto .exito p {
+  color: var(--landing-text-4);
+  margin: 0 0 24px;
+}

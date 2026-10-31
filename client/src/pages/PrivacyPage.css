@@ -1,0 +1,92 @@
+/*
+  Aviso sobre los datos (/politica-datos). MOBILE FIRST:
+  una tarjeta a todo el ancho en teléfono; desde 768px se agrandan los espacios.
+*/
+
+.privacidad {
+  min-height: 100vh;
+  padding: 40px 16px;
+  background: var(--landing-bg);
+  color: var(--landing-text);
+  font-family: var(--font-landing);
+  line-height: 1.6;
+}
+
+.privacidad-tarjeta {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  background: var(--landing-surface);
+  border: 1px solid var(--landing-line);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.privacidad h1 {
+  font-family: var(--font-landing-title);
+  font-size: 32px;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.privacidad p {
+  font-size: 17px;
+  color: var(--landing-text-2);
+}
+
+.privacidad strong {
+  color: var(--landing-text);
+}
+
+.privacidad-destacado {
+  padding: 14px 16px;
+  border-left: 3px solid var(--brand);
+  border-radius: 8px;
+  background: var(--brand-dark);
+  font-weight: 500;
+}
+
+.privacidad p.privacidad-nota {
+  font-size: 15px;
+  color: var(--landing-text-4);
+}
+
+.privacidad-volver {
+  align-self: flex-start;
+  margin-top: 8px;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: var(--brand);
+  color: var(--landing-bg);
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.privacidad-volver:hover {
+  background: var(--brand-light);
+}
+
+.privacidad-volver:focus-visible {
+  outline: 3px solid var(--landing-text);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .privacidad {
+    padding: 96px 24px;
+  }
+
+  .privacidad-tarjeta {
+    padding: 40px;
+  }
+
+  .privacidad h1 {
+    font-size: 44px;
+  }
+}
