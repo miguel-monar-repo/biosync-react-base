@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import ContactSection from '../components/landing/ContactSection.jsx'
 import PhoneMockup from '../components/landing/PhoneMockup.jsx'
 import './LandingPage.css'
 
@@ -109,6 +110,7 @@ function LandingPage() {
           <a href="#descripcion">Quiénes somos</a>
           <a href="#dedica">A qué nos dedicamos</a>
           <a href="#origen">Cómo nació</a>
+          <a href="#contacto">Contacto</a>
         </div>
       </nav>
 
@@ -227,6 +229,8 @@ function LandingPage() {
           </div>
         </div>
       </section>
+
+      <ContactSection />
 
       <footer className="bs-footer">
         <div className="bs-container bs-footer-cta">

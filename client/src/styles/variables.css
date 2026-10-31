@@ -61,4 +61,10 @@
   --landing-text-2: #C5CCDA;
   --landing-text-3: #B4BCCB;
   --landing-text-4: #8D96A8;
+
+  /* Formulario de contacto de la landing */
+  --landing-field: #0B0F17;
+  --landing-placeholder: #6B7588;
+  --brand-20: rgba(46, 230, 166, 0.2);
+  --help-10: rgba(255, 92, 108, 0.1);
 }
