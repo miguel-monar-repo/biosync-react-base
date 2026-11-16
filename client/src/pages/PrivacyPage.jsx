@@ -17,7 +17,8 @@ function PrivacyPage() {
         </p>
 
         <p>
-          Los datos que escribas en el formulario de contacto se usan <strong>solo para probar que funciona</strong>.
+          Los datos que escribas en los formularios de contacto y de compra de planes se usan{' '}
+          <strong>solo para probar que funcionan</strong>.
         </p>
 
         <p className="privacidad-destacado">No compartimos tus datos con terceros ni los usamos para otros fines.</p>

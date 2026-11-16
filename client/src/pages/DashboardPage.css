@@ -80,6 +80,36 @@
   font-weight: 600;
 }
 
+/* Enlaces con forma de botón en la barra superior de la demo */
+.topbar-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  text-decoration: none;
+}
+
+/* "Volver al inicio": botón secundario, solo con borde */
+.home-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.home-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+/* "Quiero comprar": lleva a los planes */
+.buy-btn {
+  background: var(--success);
+}
+
+.buy-btn:hover {
+  background: var(--success);
+  filter: brightness(1.1);
+}
+
 /* Usuario con sesión y botón "Cerrar sesión" (barra superior) */
 .session {
   display: flex;
@@ -271,6 +301,22 @@
   flex: 1;
   overflow-y: auto;
   padding: 16px 12px;
+}
+
+/* Aviso para usuarios sin plan asignado */
+.no-plan {
+  max-width: 560px;
+  margin: 24px auto;
+  gap: 8px;
+  text-align: center;
+}
+
+.no-plan h2 {
+  font-size: 18px;
+}
+
+.no-plan p {
+  color: var(--text-secondary);
 }
 
 /* ========== CABECERA DEL DASHBOARD ========== */

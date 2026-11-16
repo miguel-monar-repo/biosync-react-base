@@ -7,12 +7,14 @@ const PROFILES = [
   { id: 'kid', label: 'Niño', icon: 'shield' },
 ]
 
-function ProfileSidebar({ profile, onChange }) {
+// `profiles`: ids de los perfiles que el usuario puede ver según su plan.
+// `planName`: nombre del plan, o null para los admin (ven todos los perfiles)
+function ProfileSidebar({ profiles, profile, onChange, planName }) {
   return (
     <aside className="sidebar">
-      <h3>Perfiles</h3>
+      <h3>{planName ? `Tu plan: ${planName}` : 'Perfiles'}</h3>
       <div className="profile-rail">
-        {PROFILES.map((p) => (
+        {PROFILES.filter((p) => profiles.includes(p.id)).map((p) => (
           <button
             key={p.id}
             type="button"

@@ -62,7 +62,15 @@ export function AuthProvider({ children }) {
     setAttempt((n) => n + 1)
   }, [])
 
-  const value = useMemo(() => ({ status, user, login, logout, retry }), [status, user, login, logout, retry])
+  // Cuando un admin edita sus propios datos en el panel, se actualizan aquí sin volver a ingresar
+  const updateUser = useCallback((changes) => {
+    setUser((current) => (current ? { ...current, ...changes } : current))
+  }, [])
+
+  const value = useMemo(
+    () => ({ status, user, login, logout, retry, updateUser }),
+    [status, user, login, logout, retry, updateUser],
+  )
 
   return <AuthContext value={value}>{children}</AuthContext>
 }
