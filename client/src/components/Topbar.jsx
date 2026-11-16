@@ -1,6 +1,9 @@
+import { useAuth } from '../context/AuthContext.js'
 import Icon from './Icon.jsx'
 
 function Topbar() {
+  const { user, logout } = useAuth()
+
   return (
     <header className="topbar">
       <div className="brand">
@@ -22,6 +25,13 @@ function Topbar() {
           <span>
             Alertas por <b>voz</b> y vibración listas
           </span>
+        </div>
+        {/* Al cerrar sesión, la ruta protegida manda de vuelta al login */}
+        <div className="session">
+          <span className="session-email">{user?.email}</span>
+          <button type="button" className="pill-btn" onClick={logout}>
+            Cerrar sesión
+          </button>
         </div>
       </div>
     </header>

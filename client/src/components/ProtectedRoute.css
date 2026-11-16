@@ -1,0 +1,30 @@
+/* Pantalla mientras se revisa la sesión (o si no hay conexión) antes de abrir la app */
+.auth-check {
+  min-height: 100vh;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--landing-bg);
+  color: var(--landing-text-2);
+  font-family: var(--font-landing);
+  text-align: center;
+}
+
+.auth-check-btn {
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--brand);
+  color: var(--landing-bg);
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-check-btn:hover {
+  background: var(--brand-light);
+}

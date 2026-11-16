@@ -1,0 +1,135 @@
+/*
+  Login de la app (/login). MOBILE FIRST:
+  una tarjeta a todo el ancho en teléfono; desde 768px se agrandan los espacios.
+*/
+
+.login {
+  min-height: 100vh;
+  padding: 40px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--landing-bg);
+  color: var(--landing-text);
+  font-family: var(--font-landing);
+  line-height: 1.5;
+}
+
+.login-tarjeta {
+  width: 100%;
+  max-width: 440px;
+  padding: 24px 16px;
+  background: var(--landing-surface);
+  border: 1px solid var(--landing-line);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login h1 {
+  font-family: var(--font-landing-title);
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.login-intro {
+  color: var(--landing-text-4);
+}
+
+.login-campo {
+  margin-bottom: 16px;
+}
+
+.login-campo label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.login-campo input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  background: var(--landing-field);
+  color: var(--landing-text);
+  border: 1.5px solid var(--landing-line-3);
+  border-radius: 10px;
+  font: inherit;
+}
+
+.login-campo input::placeholder {
+  color: var(--landing-placeholder);
+}
+
+.login-campo input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-20);
+}
+
+.login-campo input[aria-invalid='true'] {
+  border-color: var(--help);
+}
+
+.login-error {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--help);
+  border-radius: 10px;
+  background: var(--help-10);
+  color: var(--help-pale);
+}
+
+.login-error:empty {
+  display: none;
+}
+
+.login-boton {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--brand);
+  color: var(--landing-bg);
+  font-family: var(--font-landing-title);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.login-boton:hover {
+  background: var(--brand-light);
+}
+
+.login-boton:focus-visible {
+  outline: 3px solid var(--landing-text);
+  outline-offset: 3px;
+}
+
+.login-boton:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+.login-volver {
+  align-self: center;
+  padding: 12px;
+  color: var(--brand);
+  text-decoration: none;
+}
+
+.login-volver:hover {
+  color: var(--brand-light);
+}
+
+@media (min-width: 768px) {
+  .login-tarjeta {
+    padding: 40px;
+  }
+
+  .login h1 {
+    font-size: 34px;
+  }
+}
