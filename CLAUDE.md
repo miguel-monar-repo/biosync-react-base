@@ -15,7 +15,8 @@ Explica siempre **en español y de forma sencilla**: qué se cambió, por qué y
 | Parte        | Tecnología                         | Estado          |
 |--------------|------------------------------------|-----------------|
 | Frontend     | React + Vite (JavaScript) en `client/` | Migrado         |
-| Backend      | Express en `api/` + MongoDB Atlas  | Formulario de contacto (`POST /api/contact`) |
+| Backend      | Express en `api/` + MongoDB Atlas  | Contacto, compras, login, panel y chatbot |
+| Chatbot      | API de Claude (`@anthropic-ai/sdk`, `claude-haiku-5-5`) | `api/chatbot.js` + `ChatWidget` |
 | Tiempo real  | Firebase (Firestore)               | Migrado (opcional, vía `.env`) |
 | Deploy       | Vercel: 2 proyectos del mismo repo | Landing (`client/`) y API (`api/`) |
 
@@ -23,6 +24,10 @@ Comandos (dentro de `client/`): `npm run dev`, `npm run build`, `npm run lint`.
 Comandos (dentro de `api/`): `npm run dev` (lee el `.env` de la raíz, puerto 4000).
 
 - `shared/validacionContacto.mjs`: reglas del formulario, las usan el navegador y la API.
+- `shared/planes.mjs`: planes y precios. El chatbot arma sus instrucciones con estos datos.
+- Chatbot: `ANTHROPIC_API_KEY` va solo en el `.env` de la raíz y en el proyecto de la API en Vercel
+  (nunca con prefijo `VITE_`). Solo responde sobre BioSync; fuera de tema dice
+  "Lo siento, no conozco sobre eso. Pregúntame sobre BioSync." No se muestra en el panel.
 - En local, Vite reenvía `/api` a `localhost:4000`. En Vercel la landing usa `VITE_API_URL`
   y la API acepta solo los dominios de `FRONTEND_URL` (CORS).
 

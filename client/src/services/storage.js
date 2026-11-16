@@ -1,10 +1,30 @@
-// Todo lo que se guarda en localStorage pasa por aquí.
+// Todo lo que se guarda en localStorage (y sessionStorage) pasa por aquí.
 // Las claves son las mismas del prototipo para no perder datos guardados.
 
 const FAMILY_CODE_KEY = 'biosync_family_code'
 const STEPS_DAY_KEY = 'biosync_steps_day'
 const STEPS_COUNT_KEY = 'biosync_steps_count'
 const AUTH_TOKEN_KEY = 'biosync_auth_token'
+const CHAT_HINT_KEY = 'biosync_chat_hint_dismissed'
+
+// Invitación del chatbot: si ya se cerró (o se abrió el chat) en esta visita, no se vuelve a mostrar.
+// Va en sessionStorage, así reaparece en la próxima visita. Si el navegador bloquea el
+// almacenamiento, la invitación simplemente se muestra.
+export function loadChatHintDismissed() {
+  try {
+    return sessionStorage.getItem(CHAT_HINT_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+export function saveChatHintDismissed() {
+  try {
+    sessionStorage.setItem(CHAT_HINT_KEY, '1')
+  } catch {
+    // Sin almacenamiento disponible no pasa nada: solo no se recuerda
+  }
+}
 
 // Token de la sesión del login (no vence: se borra al cerrar sesión)
 export function loadAuthToken() {

@@ -1,15 +1,17 @@
-// API de BioSync: recibe el formulario de contacto de la landing, maneja el login de la app
-// y las rutas del panel de administración. Guarda todo en MongoDB Atlas.
+// API de BioSync: recibe el formulario de contacto y las compras, responde el chatbot (API de Claude),
+// maneja el login de la app y las rutas del panel de administración. Guarda todo en MongoDB Atlas.
 //
 // Funciona de dos formas con el mismo código:
 //   - En tu computador: `npm run dev` lee el .env de la raíz y escucha en el puerto 4000.
 //   - En Vercel: Vercel importa la app (export default) y la convierte en una función.
 //     Las variables (MONGODB_URI, FRONTEND_URL...) se configuran en el panel de Vercel.
 import { createHash, randomBytes } from 'node:crypto'
+import Anthropic from '@anthropic-ai/sdk'
 import express from 'express'
 import { MongoClient, ObjectId } from 'mongodb'
 import { validarCompra } from '../shared/validacionCompra.mjs'
 import { validarContacto } from '../shared/validacionContacto.mjs'
+import { chatbotDisponible, responderChat } from './chatbot.js'
 import { hashContrasena, verificarContrasena } from './contrasenas.js'
 import { errorDePlan, validarUsuario } from './usuarios.js'
 
@@ -121,6 +123,14 @@ const limitarCompras = limitarPorIp({
   mensaje: 'Has enviado varias solicitudes, intenta más tarde',
 })
 
+// Chatbot: máximo 20 preguntas cada 10 minutos (cada pregunta gasta tokens de la API de Claude)
+const limitarChat = limitarPorIp({
+  tipo: 'chat',
+  maximo: 20,
+  minutos: 10,
+  mensaje: 'Hiciste muchas preguntas seguidas. Espera unos minutos e inténtalo de nuevo.',
+})
+
 // Login: máximo 10 intentos cada 15 minutos (frena a quien pruebe contraseñas al azar)
 const limitarLogin = limitarPorIp({
   tipo: 'login',
@@ -210,6 +220,41 @@ app.post('/api/compras', limitarCompras, async (req, res) => {
   const { compras } = await conectar()
   await compras.insertOne({ ...datos, atendida: false, creadoEn: new Date() })
   res.status(201).json({ mensaje: 'Solicitud recibida' })
+})
+
+// Chatbot: { mensajes: [{ role: 'user' | 'assistant', content }] } → { respuesta }.
+// Las conversaciones no se guardan: solo se envían a la API de Claude para generar la respuesta.
+const MAX_CARACTERES_CHAT = 500
+const MAX_MENSAJES_CHAT = 10
+const ERROR_CHAT = 'El asistente no está disponible en este momento. Inténtalo más tarde.'
+
+function validarConversacion(cuerpo) {
+  const lista = Array.isArray(cuerpo?.mensajes) ? cuerpo.mensajes.slice(-MAX_MENSAJES_CHAT) : []
+  const mensajes = lista
+    .filter((m) => (m?.role === 'user' || m?.role === 'assistant') && typeof m.content === 'string')
+    .map((m) => ({ role: m.role, content: m.content.trim().slice(0, MAX_CARACTERES_CHAT) }))
+    .filter((m) => m.content)
+  // La API de Claude exige que empiece y termine con un mensaje del usuario
+  while (mensajes.length && mensajes[0].role !== 'user') mensajes.shift()
+  if (!mensajes.length || mensajes.at(-1).role !== 'user') return null
+  return mensajes
+}
+
+app.post('/api/chat', limitarChat, async (req, res) => {
+  const mensajes = validarConversacion(req.body)
+  if (!mensajes) return res.status(400).json({ error: 'Escribe tu pregunta.' })
+  if (!chatbotDisponible()) return res.status(503).json({ error: ERROR_CHAT })
+
+  try {
+    res.json({ respuesta: await responderChat(mensajes) })
+  } catch (error) {
+    // Errores de la API de Claude (clave inválida, límite de uso, servicio caído...)
+    if (error instanceof Anthropic.APIError) {
+      console.error('Error de la API de Claude:', error.status, error.message)
+      return res.status(503).json({ error: ERROR_CHAT })
+    }
+    throw error
+  }
 })
 
 // Login: recibe { email, contrasena } y, si coinciden, devuelve { token, usuario }
