@@ -21,9 +21,17 @@ function PrivacyPage() {
           <strong>solo para probar que funcionan</strong>.
         </p>
 
-        <p className="privacidad-destacado">No compartimos tus datos con terceros ni los usamos para otros fines.</p>
+        <p className="privacidad-destacado">
+          No compartimos los datos de tus formularios con terceros ni los usamos para otros fines.
+        </p>
 
         <p>Se guardan en una base de datos de prueba (MongoDB Atlas) y se pueden borrar en cualquier momento.</p>
+
+        <p>
+          <strong>Asistente virtual:</strong> lo que escribas en el chat se envía a Anthropic (el proveedor de la
+          inteligencia artificial Claude) solo para generar la respuesta. Nosotros no guardamos las conversaciones. Por
+          eso, no escribas datos personales en el chat.
+        </p>
 
         <p>Si no quieres dejar tus datos reales, puedes usar datos de ejemplo.</p>
 
