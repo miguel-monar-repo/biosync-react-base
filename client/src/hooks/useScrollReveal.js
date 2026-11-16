@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 // Hace aparecer suavemente los elementos con el atributo `data-reveal` cuando entran en pantalla.
 // Uso: const ref = useRef(null); useScrollReveal(ref); <div ref={ref}> ... <div data-reveal> ...
+// Forma de aparecer: data-reveal (sube), data-reveal="izquierda", "derecha" o "pop" (crece con rebote).
 // Para que aparezcan uno tras otro: style={{ '--reveal-delay': '120ms' }} en cada elemento.
 //
 // Los elementos solo se ocultan después de que este hook marca el contenedor con `reveal-ready`
