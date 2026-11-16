@@ -259,7 +259,7 @@ El mismo repositorio se publica en Vercel como **dos proyectos**:
 | Persona | GitHub |
 |---|---|
 | Miguel Monar | [miguel-monar-repo](https://github.com/miguel-monar-repo) |
-| Paula Morillo | — |
+| Paula Morillo | [paulaveronica07-ctrl](https://github.com/paulaveronica07-ctrl) |
 
 BioSync nació de una pregunta: *¿y si el teléfono pudiera avisarle a la familia cuando algo no va bien?*
 La idea fue de Miguel y Paula, quienes la convirtieron en BioSync.
