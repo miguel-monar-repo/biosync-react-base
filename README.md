@@ -53,6 +53,10 @@ familia, con voz y vibración, cuando algo no va bien. Sin aparatos extra: solo 
   correo y celular; el equipo crea su cuenta y le envía la contraseña y el método de pago a ese correo.
 - **Ingreso con cuenta:** cada usuario ve en la app **solo el perfil de su plan**.
 - **Formulario de contacto** para dudas.
+- **Asistente virtual:** un botón flotante en todas las páginas responde dudas sobre los planes, sus
+  precios, su duración y cómo comprar, usando la inteligencia artificial Claude (Anthropic). Solo
+  habla de BioSync: ante cualquier otro tema responde *"Lo siento, no conozco sobre eso. Pregúntame
+  sobre BioSync."* No guarda las conversaciones.
 - **Aviso sobre el tratamiento de datos personales.**
 
 ### Para el equipo
@@ -146,7 +150,8 @@ biosync-react-base/
 
 | Archivo | Qué hace |
 |---|---|
-| `index.js` | La API: formulario de contacto, solicitudes de compra, ingreso y cierre de sesión, y rutas del panel |
+| `index.js` | La API: formulario de contacto, solicitudes de compra, asistente virtual, ingreso y cierre de sesión, y rutas del panel |
+| `chatbot.js` | Asistente virtual: instrucciones (armadas desde `shared/planes.mjs`) y llamada a la API de Claude |
 | `contrasenas.js` | Hash y verificación de contraseñas con `scrypt` |
 | `usuarios.js` | Reglas de los usuarios: correo, rol, plan, contraseña |
 | `scripts/crear-usuario.js` | Crea o actualiza un usuario desde la terminal (por ejemplo, el primer admin) |
@@ -158,6 +163,7 @@ Rutas públicas de la API:
 | `GET /` | Comprobar que la API está en línea |
 | `POST /api/contact` | Enviar el formulario de contacto |
 | `POST /api/compras` | Enviar una solicitud de compra |
+| `POST /api/chat` | Preguntar al asistente virtual (máximo 20 preguntas cada 10 minutos) |
 | `POST /api/login` | Ingresar; devuelve un token de sesión |
 | `GET /api/sesion` | Comprobar la sesión |
 | `POST /api/logout` | Cerrar la sesión |
@@ -192,6 +198,7 @@ Las rutas del panel requieren una sesión con rol de administrador.
 | Backend | Node.js, Express 5 |
 | Base de datos | MongoDB Atlas |
 | Tiempo real (familia) | Firebase Firestore (opcional) |
+| Asistente virtual | API de Claude (Anthropic), modelo Claude Haiku 5.5, con el SDK `@anthropic-ai/sdk` |
 | Despliegue | Vercel (dos proyectos: web y API) |
 | Lenguaje | JavaScript (sin TypeScript) |
 
@@ -212,7 +219,10 @@ Requisitos: Node.js 22 o superior y una base de datos en MongoDB Atlas.
    MONGODB_DB=biosync
    MONGODB_COLLECTION=contacts
    PORT=4000
+   ANTHROPIC_API_KEY=
    ```
+   `ANTHROPIC_API_KEY` es la clave de la API de Claude para el asistente virtual. Sin ella, el resto
+   de la web funciona igual y el asistente responde que no está disponible.
 3. Opcional: para sincronizar familias, copia `client/.env.example` como `client/.env` y completa los
    datos de Firebase.
 4. Crea el primer usuario administrador:
@@ -239,7 +249,7 @@ El mismo repositorio se publica en Vercel como **dos proyectos**:
 | Proyecto | Carpeta | Variables de entorno |
 |---|---|---|
 | Web | `client/` | `VITE_API_URL` (dirección de la API) |
-| API | `api/` | `MONGODB_URI`, `MONGODB_DB`, `MONGODB_COLLECTION`, `FRONTEND_URL` (dirección de la web) |
+| API | `api/` | `MONGODB_URI`, `MONGODB_DB`, `MONGODB_COLLECTION`, `FRONTEND_URL` (dirección de la web), `ANTHROPIC_API_KEY` |
 
 - La rama `main` se publica en producción; las demás ramas generan versiones de prueba (preview).
 - Todo cambio llega a `main` por medio de un Pull Request.
@@ -248,9 +258,8 @@ El mismo repositorio se publica en Vercel como **dos proyectos**:
 
 ## Próximos pasos
 
-- **Asistente virtual (chatbot):** un botón flotante en todas las páginas para resolver dudas sobre
-  los planes, sus precios y su duración, usando la API de Claude (Anthropic). Está pensado solo para
-  orientar a las personas usuarias, no para dar información técnica del sistema.
+- **Envío automático de correos** con la contraseña y el método de pago al crear una cuenta.
+- **Pasarela de pago** para cobrar los planes dentro de la web.
 
 ---
 
