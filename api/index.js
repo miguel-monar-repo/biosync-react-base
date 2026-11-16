@@ -1,5 +1,5 @@
-// API de BioSync: recibe el formulario de contacto de la landing y maneja el login de la app.
-// Guarda todo en MongoDB Atlas.
+// API de BioSync: recibe el formulario de contacto de la landing, maneja el login de la app
+// y las rutas del panel de administración. Guarda todo en MongoDB Atlas.
 //
 // Funciona de dos formas con el mismo código:
 //   - En tu computador: `npm run dev` lee el .env de la raíz y escucha en el puerto 4000.
@@ -7,9 +7,11 @@
 //     Las variables (MONGODB_URI, FRONTEND_URL...) se configuran en el panel de Vercel.
 import { createHash, randomBytes } from 'node:crypto'
 import express from 'express'
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectId } from 'mongodb'
+import { validarCompra } from '../shared/validacionCompra.mjs'
 import { validarContacto } from '../shared/validacionContacto.mjs'
 import { hashContrasena, verificarContrasena } from './contrasenas.js'
+import { errorDePlan, validarUsuario } from './usuarios.js'
 
 const EN_VERCEL = Boolean(process.env.VERCEL) // Vercel define VERCEL=1 automáticamente
 const PORT = process.env.PORT || 4000
@@ -40,7 +42,13 @@ function conectar() {
       await usuarios.createIndexes([{ key: { email: 1 }, unique: true }])
       await sesiones.createIndexes([{ key: { tokenHash: 1 }, unique: true }])
       console.log('Conectado a MongoDB')
-      return { contactos: db.collection(process.env.MONGODB_COLLECTION || 'contacts'), envios, usuarios, sesiones }
+      return {
+        contactos: db.collection(process.env.MONGODB_COLLECTION || 'contacts'),
+        compras: db.collection('compras'),
+        envios,
+        usuarios,
+        sesiones,
+      }
     })
     // Si falla, se borra para que la siguiente petición lo intente de nuevo
     conexion.catch(() => {
@@ -64,7 +72,7 @@ app.use((req, res, next) => {
   const origen = req.headers.origin
   if (origen && ORIGENES_PERMITIDOS.includes(origen)) {
     res.set('Access-Control-Allow-Origin', origen)
-    res.set('Access-Control-Allow-Methods', 'GET, POST')
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE')
     // Authorization lleva el token de la sesión
     res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   }
@@ -105,6 +113,14 @@ const limitarEnvios = limitarPorIp({
   mensaje: 'Has enviado varios mensajes, intenta más tarde',
 })
 
+// Compra de planes: máximo 5 solicitudes por hora
+const limitarCompras = limitarPorIp({
+  tipo: 'compra',
+  maximo: 5,
+  minutos: 60,
+  mensaje: 'Has enviado varias solicitudes, intenta más tarde',
+})
+
 // Login: máximo 10 intentos cada 15 minutos (frena a quien pruebe contraseñas al azar)
 const limitarLogin = limitarPorIp({
   tipo: 'login',
@@ -122,8 +138,14 @@ const ERROR_LOGIN = 'Correo o contraseña incorrectos.'
 // tarde lo mismo y no revele qué correos están registrados
 const hashFalso = hashContrasena(randomBytes(16).toString('hex'))
 
-// Datos del usuario que se envían a la app (nunca la contraseña)
-const datosPublicos = (usuario) => ({ email: usuario.email, nombre: usuario.nombre, rol: usuario.rol })
+// Datos del usuario que se envían a la app (nunca la contraseña). Con el plan, la app decide
+// qué perfiles mostrar.
+const datosPublicos = (usuario) => ({
+  email: usuario.email,
+  nombre: usuario.nombre,
+  rol: usuario.rol,
+  plan: usuario.plan ?? null,
+})
 
 function leerToken(req) {
   const [tipo, token] = (req.headers.authorization || '').split(' ')
@@ -169,6 +191,27 @@ app.post('/api/contact', limitarEnvios, async (req, res) => {
   res.status(201).json({ mensaje: 'Mensaje recibido' })
 })
 
+// Solicitud de compra de un plan: { plan, email, celular, consentimiento, website }.
+// No crea el usuario: queda en "compras" y el equipo lo crea desde el panel, y le envía
+// la contraseña y el método de pago a ese correo.
+app.post('/api/compras', limitarCompras, async (req, res) => {
+  const cuerpo = req.body || {}
+
+  // Campo trampa, igual que en el formulario de contacto
+  if (cuerpo.website) {
+    return res.status(201).json({ mensaje: 'Solicitud recibida' })
+  }
+
+  const { datos, errores, valido } = validarCompra(cuerpo)
+  if (!valido) {
+    return res.status(400).json({ errores })
+  }
+
+  const { compras } = await conectar()
+  await compras.insertOne({ ...datos, atendida: false, creadoEn: new Date() })
+  res.status(201).json({ mensaje: 'Solicitud recibida' })
+})
+
 // Login: recibe { email, contrasena } y, si coinciden, devuelve { token, usuario }
 app.post('/api/login', limitarLogin, async (req, res) => {
   const { email, contrasena } = req.body || {}
@@ -197,6 +240,234 @@ app.get('/api/sesion', requiereSesion, (req, res) => {
 app.post('/api/logout', requiereSesion, async (req, res) => {
   const { sesiones } = await conectar()
   await sesiones.deleteOne({ tokenHash: req.tokenHash })
+  res.sendStatus(204)
+})
+
+// ---------- Panel de administración ----------
+// Todas las rutas /api/admin piden sesión Y rol admin. Esta es la protección real:
+// ocultar la pantalla en la app no basta, porque cualquiera puede llamar a la API directamente.
+function requiereAdmin(req, res, next) {
+  if (req.usuario.rol !== 'admin') {
+    return res.status(403).json({ error: 'No tienes permiso para entrar al panel.' })
+  }
+  next()
+}
+
+app.use('/api/admin', requiereSesion, requiereAdmin)
+
+// Busca el mensaje por su id; responde 404 si el id no es válido o no existe
+async function buscarContacto(req, res) {
+  if (!ObjectId.isValid(req.params.id)) {
+    res.status(404).json({ error: 'No encontramos ese mensaje.' })
+    return null
+  }
+  const { contactos } = await conectar()
+  const contacto = await contactos.findOne({ _id: new ObjectId(req.params.id) })
+  if (!contacto) res.status(404).json({ error: 'No encontramos ese mensaje.' })
+  return contacto
+}
+
+// Mensajes del formulario, del más reciente al más antiguo (máximo 500)
+app.get('/api/admin/contactos', async (req, res) => {
+  const { contactos } = await conectar()
+  const lista = await contactos.find().sort({ creadoEn: -1 }).limit(500).toArray()
+  res.json({ contactos: lista })
+})
+
+// Marcar un mensaje como atendido o pendiente: { atendido: true | false }
+app.patch('/api/admin/contactos/:id', async (req, res) => {
+  const { atendido } = req.body || {}
+  if (typeof atendido !== 'boolean') {
+    return res.status(400).json({ error: 'Falta indicar si el mensaje está atendido.' })
+  }
+  const contacto = await buscarContacto(req, res)
+  if (!contacto) return
+
+  const { contactos } = await conectar()
+  await contactos.updateOne({ _id: contacto._id }, { $set: { atendido } })
+  res.json({ contacto: { ...contacto, atendido } })
+})
+
+// Borrar un mensaje (el aviso de datos dice que se pueden borrar)
+app.delete('/api/admin/contactos/:id', async (req, res) => {
+  const contacto = await buscarContacto(req, res)
+  if (!contacto) return
+
+  const { contactos } = await conectar()
+  await contactos.deleteOne({ _id: contacto._id })
+  res.sendStatus(204)
+})
+
+// ---------- Panel: solicitudes de compra ----------
+
+async function buscarCompra(req, res) {
+  if (!ObjectId.isValid(req.params.id)) {
+    res.status(404).json({ error: 'No encontramos esa solicitud.' })
+    return null
+  }
+  const { compras } = await conectar()
+  const compra = await compras.findOne({ _id: new ObjectId(req.params.id) })
+  if (!compra) res.status(404).json({ error: 'No encontramos esa solicitud.' })
+  return compra
+}
+
+// Solicitudes de compra, de la más reciente a la más antigua (máximo 500)
+app.get('/api/admin/compras', async (req, res) => {
+  const { compras } = await conectar()
+  const lista = await compras.find().sort({ creadoEn: -1 }).limit(500).toArray()
+  res.json({ compras: lista })
+})
+
+// Marcar una solicitud como atendida o pendiente: { atendida: true | false }
+app.patch('/api/admin/compras/:id', async (req, res) => {
+  const { atendida } = req.body || {}
+  if (typeof atendida !== 'boolean') {
+    return res.status(400).json({ error: 'Falta indicar si la solicitud está atendida.' })
+  }
+  const compra = await buscarCompra(req, res)
+  if (!compra) return
+
+  const { compras } = await conectar()
+  await compras.updateOne({ _id: compra._id }, { $set: { atendida } })
+  res.json({ compra: { ...compra, atendida } })
+})
+
+app.delete('/api/admin/compras/:id', async (req, res) => {
+  const compra = await buscarCompra(req, res)
+  if (!compra) return
+
+  const { compras } = await conectar()
+  await compras.deleteOne({ _id: compra._id })
+  res.sendStatus(204)
+})
+
+// ---------- Panel: gestión de usuarios ----------
+// Reglas para no quedarse sin acceso al panel: un admin no puede borrarse ni quitarse el rol
+// a sí mismo, y siempre debe quedar al menos un admin.
+const ERROR_EMAIL_REPETIDO = { email: 'Ya existe un usuario con ese correo.' }
+
+// Datos del usuario que ve el panel (nunca la contraseña)
+const usuarioParaPanel = (u) => ({
+  _id: u._id,
+  email: u.email,
+  nombre: u.nombre,
+  rol: u.rol,
+  plan: u.plan ?? null,
+  creadoEn: u.creadoEn,
+  actualizadoEn: u.actualizadoEn,
+})
+
+const esEmailRepetido = (error) => error?.code === 11000 // índice único de "email"
+
+async function buscarUsuario(req, res) {
+  if (!ObjectId.isValid(req.params.id)) {
+    res.status(404).json({ error: 'No encontramos ese usuario.' })
+    return null
+  }
+  const { usuarios } = await conectar()
+  const usuario = await usuarios.findOne({ _id: new ObjectId(req.params.id) })
+  if (!usuario) res.status(404).json({ error: 'No encontramos ese usuario.' })
+  return usuario
+}
+
+// true si `usuario` es el único admin que queda
+async function esUltimoAdmin(usuario) {
+  if (usuario.rol !== 'admin') return false
+  const { usuarios } = await conectar()
+  return (await usuarios.countDocuments({ rol: 'admin' })) <= 1
+}
+
+// Lista de usuarios, del más reciente al más antiguo
+app.get('/api/admin/usuarios', async (req, res) => {
+  const { usuarios } = await conectar()
+  const lista = await usuarios.find().sort({ creadoEn: -1 }).toArray()
+  res.json({ usuarios: lista.map(usuarioParaPanel) })
+})
+
+// Crear usuario: { email, nombre, rol, contrasena }
+app.post('/api/admin/usuarios', async (req, res) => {
+  const { datos, errores } = validarUsuario(req.body || {}, { nuevo: true })
+  if (Object.keys(errores).length > 0) return res.status(400).json({ errores })
+
+  const { usuarios } = await conectar()
+  const ahora = new Date()
+  const nuevo = {
+    email: datos.email,
+    nombre: datos.nombre,
+    rol: datos.rol,
+    plan: datos.rol === 'admin' ? null : datos.plan, // los admin ven todo, no usan plan
+    contrasena: await hashContrasena(datos.contrasena),
+    creadoEn: ahora,
+    actualizadoEn: ahora,
+  }
+  try {
+    const { insertedId } = await usuarios.insertOne(nuevo)
+    res.status(201).json({ usuario: usuarioParaPanel({ ...nuevo, _id: insertedId }) })
+  } catch (error) {
+    if (esEmailRepetido(error)) return res.status(409).json({ errores: ERROR_EMAIL_REPETIDO })
+    throw error
+  }
+})
+
+// Editar usuario: solo los campos que lleguen ({ email, nombre, rol, contrasena }).
+// La contraseña vacía o ausente no se cambia.
+app.patch('/api/admin/usuarios/:id', async (req, res) => {
+  const { datos, errores } = validarUsuario(req.body || {}, { nuevo: false })
+  if (Object.keys(errores).length > 0) return res.status(400).json({ errores })
+  if (Object.keys(datos).length === 0) return res.status(400).json({ error: 'No hay cambios para guardar.' })
+
+  const usuario = await buscarUsuario(req, res)
+  if (!usuario) return
+
+  const esMismo = usuario._id.equals(req.usuario._id)
+  if (datos.rol && datos.rol !== usuario.rol) {
+    if (esMismo) return res.status(400).json({ errores: { rol: 'No puedes quitarte el rol de admin.' } })
+    if (await esUltimoAdmin(usuario)) {
+      return res.status(400).json({ errores: { rol: 'Debe quedar al menos un admin.' } })
+    }
+  }
+
+  // El plan se revisa con cómo queda el usuario: por ejemplo, pasar a "usuario" exige un plan
+  const final = { rol: datos.rol ?? usuario.rol, plan: datos.plan !== undefined ? datos.plan : usuario.plan }
+  const errorPlan = errorDePlan(final)
+  if (errorPlan) return res.status(400).json({ errores: { plan: errorPlan } })
+
+  const cambios = { ...datos, actualizadoEn: new Date() }
+  if (final.rol === 'admin') cambios.plan = null // los admin ven todo, no usan plan
+  if (datos.contrasena) cambios.contrasena = await hashContrasena(datos.contrasena)
+
+  const { usuarios, sesiones } = await conectar()
+  try {
+    await usuarios.updateOne({ _id: usuario._id }, { $set: cambios })
+  } catch (error) {
+    if (esEmailRepetido(error)) return res.status(409).json({ errores: ERROR_EMAIL_REPETIDO })
+    throw error
+  }
+
+  // Con contraseña nueva se cierran sus otras sesiones (la de quien hace el cambio se mantiene)
+  if (datos.contrasena) {
+    await sesiones.deleteMany({ usuarioId: usuario._id, tokenHash: { $ne: req.tokenHash } })
+  }
+
+  const { contrasena: _omitida, ...sinContrasena } = cambios
+  res.json({ usuario: usuarioParaPanel({ ...usuario, ...sinContrasena }) })
+})
+
+// Borrar usuario y todas sus sesiones
+app.delete('/api/admin/usuarios/:id', async (req, res) => {
+  const usuario = await buscarUsuario(req, res)
+  if (!usuario) return
+
+  if (usuario._id.equals(req.usuario._id)) {
+    return res.status(400).json({ error: 'No puedes borrar tu propio usuario.' })
+  }
+  if (await esUltimoAdmin(usuario)) {
+    return res.status(400).json({ error: 'Debe quedar al menos un admin.' })
+  }
+
+  const { usuarios, sesiones } = await conectar()
+  await usuarios.deleteOne({ _id: usuario._id })
+  await sesiones.deleteMany({ usuarioId: usuario._id })
   res.sendStatus(204)
 })
 

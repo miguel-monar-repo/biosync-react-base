@@ -1,7 +1,10 @@
+import { Link } from 'react-router'
 import { useAuth } from '../context/AuthContext.js'
 import Icon from './Icon.jsx'
 
-function Topbar() {
+// `showSession`: muestra el correo y "Cerrar sesión" (en /app).
+// `demo`: en la demo pública muestra "Volver al inicio" y "Quiero comprar" (lleva a los planes).
+function Topbar({ showSession = false, demo = false }) {
   const { user, logout } = useAuth()
 
   return (
@@ -26,13 +29,25 @@ function Topbar() {
             Alertas por <b>voz</b> y vibración listas
           </span>
         </div>
+        {demo && (
+          <>
+            <Link className="pill-btn topbar-link home-btn" to="/">
+              Volver al inicio
+            </Link>
+            <Link className="pill-btn topbar-link buy-btn" to="/planes">
+              Quiero comprar
+            </Link>
+          </>
+        )}
         {/* Al cerrar sesión, la ruta protegida manda de vuelta al login */}
-        <div className="session">
-          <span className="session-email">{user?.email}</span>
-          <button type="button" className="pill-btn" onClick={logout}>
-            Cerrar sesión
-          </button>
-        </div>
+        {showSession && user && (
+          <div className="session">
+            <span className="session-email">{user.email}</span>
+            <button type="button" className="pill-btn" onClick={logout}>
+              Cerrar sesión
+            </button>
+          </div>
+        )}
       </div>
     </header>
   )

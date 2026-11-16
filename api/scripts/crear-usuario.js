@@ -1,26 +1,28 @@
 // Crea un usuario para entrar a la app (o actualiza su contraseña, nombre y rol si el correo ya existe).
-// No hay pantalla de registro: los usuarios se crean solo con este script.
+// Normalmente los usuarios se manejan desde el panel de administración; este script sirve para
+// crear el primer admin o recuperar el acceso si nadie puede entrar al panel.
 //
 // Uso (dentro de api/):
-//   npm run crear-usuario -- --email correo@ejemplo.com --nombre "Nombre" --rol usuario
+//   npm run crear-usuario -- --email correo@ejemplo.com --nombre "Nombre" --rol usuario --plan deportivo
 //   npm run crear-usuario -- --email correo@ejemplo.com --nombre "Nombre" --rol admin --generar
 //
 //   --rol      admin o usuario (por defecto: usuario)
+//   --plan     obligatorio para rol usuario: deportivo, adulto-mayor, nino o familiar
+//              (ver shared/planes.mjs). Los admin no usan plan.
 //   --generar  crea una contraseña aleatoria y la muestra una sola vez.
 //              Sin --generar, el script te pide escribir la contraseña (mínimo 8 caracteres).
 import { createInterface } from 'node:readline/promises'
 import { parseArgs } from 'node:util'
 import { MongoClient } from 'mongodb'
-import { reglas } from '../../shared/validacionContacto.mjs'
 import { generarContrasena, hashContrasena } from '../contrasenas.js'
-
-const ROLES = ['admin', 'usuario']
+import { errorDePlan, MIN_CONTRASENA, validarUsuario } from '../usuarios.js'
 
 const { values } = parseArgs({
   options: {
     email: { type: 'string' },
     nombre: { type: 'string', default: '' },
     rol: { type: 'string', default: 'usuario' },
+    plan: { type: 'string', default: '' },
     generar: { type: 'boolean', default: false },
   },
 })
@@ -30,10 +32,18 @@ function terminar(mensaje) {
   process.exit(1)
 }
 
-// Se reutiliza la regla del correo del formulario de contacto
-const { valor: email, error } = reglas.email(values.email)
-if (!values.email || error) terminar('Falta un correo válido: --email correo@ejemplo.com')
-if (!ROLES.includes(values.rol)) terminar(`El rol debe ser: ${ROLES.join(' o ')}`)
+// Primero se revisan correo, nombre (opcional), rol y plan, con las mismas reglas que el panel
+const previa = validarUsuario(
+  { email: values.email, nombre: values.nombre || undefined, rol: values.rol, plan: values.plan },
+  { nuevo: false },
+)
+const errorPlan = errorDePlan(previa.datos)
+if (errorPlan && !previa.errores.plan) previa.errores.plan = `${errorPlan} Usa --plan.`
+if (!values.email || Object.keys(previa.errores).length > 0) {
+  terminar(Object.values(previa.errores).join(' ') || 'Falta el correo: --email correo@ejemplo.com')
+}
+const { email } = previa.datos
+const plan = previa.datos.rol === 'admin' ? null : previa.datos.plan
 
 let contrasena
 if (values.generar) {
@@ -43,7 +53,9 @@ if (values.generar) {
   contrasena = await rl.question('Contraseña (mínimo 8 caracteres): ')
   rl.close()
 }
-if (contrasena.length < 8) terminar('La contraseña debe tener al menos 8 caracteres.')
+if (contrasena.length < MIN_CONTRASENA) {
+  terminar(`La contraseña debe tener al menos ${MIN_CONTRASENA} caracteres.`)
+}
 
 const client = new MongoClient(process.env.MONGODB_URI)
 try {
@@ -57,6 +69,7 @@ try {
       $set: {
         nombre: values.nombre.trim() || email.split('@')[0],
         rol: values.rol,
+        plan,
         contrasena: await hashContrasena(contrasena),
         actualizadoEn: new Date(),
       },
@@ -65,7 +78,11 @@ try {
     { upsert: true },
   )
 
-  console.log(resultado.upsertedCount ? 'Usuario creado:' : 'Usuario actualizado:', email, `(rol: ${values.rol})`)
+  console.log(
+    resultado.upsertedCount ? 'Usuario creado:' : 'Usuario actualizado:',
+    email,
+    `(rol: ${values.rol}${plan ? `, plan: ${plan}` : ''})`,
+  )
   if (values.generar) {
     console.log('Contraseña generada (guárdala, no se vuelve a mostrar):', contrasena)
   }

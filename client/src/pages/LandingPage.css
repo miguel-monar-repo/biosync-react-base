@@ -89,6 +89,19 @@
   font-size: 15px;
 }
 
+/* Botón "Ingresar" del menú: lleva al login de la app */
+.bs-main-container .bs-nav-links .bs-nav-login {
+  border: 1px solid var(--brand);
+  border-radius: 999px;
+  color: var(--brand);
+  font-weight: 500;
+}
+
+.bs-main-container .bs-nav-links .bs-nav-login:hover {
+  background: var(--brand-dark);
+  color: var(--brand-light);
+}
+
 /* ========== HERO ========== */
 .bs-hero {
   max-width: 1160px;
