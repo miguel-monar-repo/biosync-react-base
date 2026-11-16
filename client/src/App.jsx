@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router'
+import ChatWidget from './components/ChatWidget.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { AuthProvider } from './context/AuthProvider.jsx'
 import { ToastProvider } from './context/ToastProvider.jsx'
@@ -49,6 +50,8 @@ function App() {
           {/* Cualquier otra dirección vuelve al inicio */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        {/* Asistente virtual: botón flotante en todas las páginas (se oculta solo en el panel) */}
+        <ChatWidget />
       </AuthProvider>
     </ToastProvider>
   )
