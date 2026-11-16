@@ -59,6 +59,7 @@
 
 .device-status {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   width: 100%;
 }
@@ -77,6 +78,22 @@
 
 .pill b {
   font-weight: 600;
+}
+
+/* Usuario con sesión y botón "Cerrar sesión" (barra superior) */
+.session {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.session-email {
+  color: var(--text-secondary);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ========== BARRAS DE AUDIO Y FAMILIA ========== */
