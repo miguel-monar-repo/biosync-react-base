@@ -163,12 +163,13 @@ function ContactSection({
   return (
     <section id={seccionId} className="seccion-contacto">
       <div className="contacto">
-        <div className="contacto-intro">
+        {/* data-reveal: aparecen al hacer scroll (useScrollReveal en LandingPage) */}
+        <div className="contacto-intro" data-reveal>
           <h2 className="contacto-titulo">{titulo}</h2>
           <p>{texto}</p>
         </div>
 
-        <div className="tarjeta">
+        <div className="tarjeta" data-reveal style={{ '--reveal-delay': '120ms' }}>
           {nombreEnviado ? (
             <div className="exito">
               <h3 ref={exitoRef} tabIndex={-1}>
