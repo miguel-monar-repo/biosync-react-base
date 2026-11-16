@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import { askAssistant } from '../services/chat.js'
+import { loadChatHintDismissed, saveChatHintDismissed } from '../services/storage.js'
 import './ChatWidget.css'
 
 // Asistente virtual: botón flotante en todas las páginas (menos el panel de administración)
@@ -13,6 +14,7 @@ const BIENVENIDA = {
 const SUGERENCIAS = ['¿Cuánto cuestan los planes?', '¿Qué incluye el plan Familiar?', '¿Cómo compro un plan?']
 const MAX_CARACTERES = 500
 const MAX_HISTORIAL = 10 // mensajes que se envían a la API (la API también lo limita)
+const ESPERA_INVITACION_MS = 2000 // la burbuja de invitación aparece 2 s después de entrar
 
 function ChatWidget() {
   const id = useId()
@@ -22,6 +24,8 @@ function ChatWidget() {
   const [texto, setTexto] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState('')
+  // Burbuja "¿Tienes dudas?" junto al botón, para animar a usar el chat
+  const [invitacion, setInvitacion] = useState(false)
 
   const listaRef = useRef(null)
   const inputRef = useRef(null)
@@ -37,8 +41,25 @@ function ChatWidget() {
     if (abierto) inputRef.current?.focus()
   }, [abierto])
 
+  // La invitación aparece una vez por visita, salvo que ya se haya cerrado o usado el chat
+  useEffect(() => {
+    if (loadChatHintDismissed()) return
+    const timer = setTimeout(() => setInvitacion(true), ESPERA_INVITACION_MS)
+    return () => clearTimeout(timer)
+  }, [])
+
   // El panel de administración es interno: ahí no se muestra
   if (pathname.startsWith('/admin')) return null
+
+  function descartarInvitacion() {
+    setInvitacion(false)
+    saveChatHintDismissed()
+  }
+
+  function abrir() {
+    descartarInvitacion()
+    setAbierto(true)
+  }
 
   function cerrar() {
     setAbierto(false)
@@ -145,11 +166,29 @@ function ChatWidget() {
         </section>
       )}
 
+      {/* Invitación: toda la burbuja abre el chat; la × solo la cierra */}
+      {invitacion && !abierto && (
+        <div className="chat-invitacion" role="status">
+          <button type="button" className="chat-invitacion-texto" onClick={abrir}>
+            <strong>Asistente BioSync 👋</strong>
+            <span>¿Tienes dudas sobre los planes o los precios? ¡Pregúntame!</span>
+          </button>
+          <button
+            type="button"
+            className="chat-invitacion-cerrar"
+            onClick={descartarInvitacion}
+            aria-label="Cerrar la invitación del asistente"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <button
         type="button"
         ref={botonRef}
         className="chat-boton"
-        onClick={() => (abierto ? cerrar() : setAbierto(true))}
+        onClick={() => (abierto ? cerrar() : abrir())}
         aria-expanded={abierto}
         aria-label={abierto ? 'Cerrar el asistente' : 'Abrir el asistente de BioSync'}
       >

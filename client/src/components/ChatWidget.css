@@ -47,6 +47,87 @@
   outline-offset: 3px;
 }
 
+/* ---------- Burbuja de invitación ---------- */
+
+.chat-invitacion {
+  position: fixed;
+  right: 16px;
+  bottom: 84px;
+  z-index: 998;
+  max-width: min(280px, calc(100vw - 32px));
+  border: 1px solid var(--brand);
+  border-radius: 16px;
+  border-bottom-right-radius: 4px; /* "pico" hacia el botón */
+  background: var(--landing-surface);
+  color: var(--landing-text);
+  box-shadow: 0 8px 24px var(--shadow);
+  display: flex;
+  align-items: flex-start;
+  animation: chat-invitacion-entra 0.35s ease-out;
+}
+
+.chat-invitacion-texto {
+  flex: 1;
+  padding: 12px 4px 12px 14px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chat-invitacion-texto strong {
+  color: var(--brand);
+  font-family: var(--font-landing-title);
+  font-size: 14px;
+}
+
+.chat-invitacion-texto span {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.chat-invitacion-texto:focus-visible,
+.chat-invitacion-cerrar:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+
+.chat-invitacion-cerrar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  margin: 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--landing-text-4);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.chat-invitacion-cerrar:hover {
+  background: var(--landing-line);
+  color: var(--landing-text);
+}
+
+@keyframes chat-invitacion-entra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---------- Ventana ---------- */
 
 .chat-ventana {
@@ -242,10 +323,20 @@
     left: auto;
     width: 380px;
   }
+
+  .chat-invitacion {
+    right: 24px;
+    bottom: 92px;
+  }
 }
 
+/* Si la persona pidió menos animaciones en su sistema, se apagan */
 @media (prefers-reduced-motion: reduce) {
   .chat-mensajes {
     scroll-behavior: auto;
+  }
+
+  .chat-invitacion {
+    animation: none;
   }
 }
