@@ -1,6 +1,8 @@
+import { useRef } from 'react'
 import { Link } from 'react-router'
 import ContactSection from '../components/landing/ContactSection.jsx'
 import PhoneMockup from '../components/landing/PhoneMockup.jsx'
+import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import './LandingPage.css'
 
 // Propiedades comunes de los iconos de la landing (el color sale de CSS con currentColor)
@@ -92,9 +94,16 @@ const STEPS = [
   },
 ]
 
+// Retraso de aparición para que los elementos de una misma fila salgan uno tras otro
+const revealDelay = (index) => ({ '--reveal-delay': `${index * 120}ms` })
+
 function LandingPage() {
+  // Las secciones marcadas con data-reveal aparecen suavemente al hacer scroll
+  const pageRef = useRef(null)
+  useScrollReveal(pageRef)
+
   return (
-    <div className="bs-main-container">
+    <div className="bs-main-container" ref={pageRef}>
       <title>BioSync, Página de la Marca</title>
 
       <nav className="bs-nav">
@@ -119,7 +128,7 @@ function LandingPage() {
       </nav>
 
       <header className="bs-hero">
-        <div className="bs-hero-content">
+        <div className="bs-hero-content" data-reveal="izquierda">
           <div className="bs-badge">
             <span className="bs-badge-dot"></span>
             Página de la Marca
@@ -147,11 +156,11 @@ function LandingPage() {
 
       <section id="descripcion" className="bs-section-desc">
         <div className="bs-container bs-desc-grid">
-          <div className="bs-section-header">
+          <div className="bs-section-header" data-reveal="izquierda">
             <div className="bs-section-tag">01 · Quiénes somos</div>
             <h2 className="bs-section-title">El emprendimiento</h2>
           </div>
-          <div className="bs-desc-text">
+          <div className="bs-desc-text" data-reveal="derecha" style={revealDelay(1)}>
             <p>
               BioSync es una aplicación que mantiene a las familias conectadas sin que nadie tenga que llamar cada rato
               para preguntar “¿estás bien?”.
@@ -167,7 +176,7 @@ function LandingPage() {
       </section>
 
       <section id="dedica" className="bs-container bs-dedica-section">
-        <div className="bs-dedica-intro">
+        <div className="bs-dedica-intro" data-reveal="izquierda">
           <div className="bs-section-tag">02 · A qué nos dedicamos</div>
           <h2 className="bs-section-title">Cuidamos a quien más quieres, a la distancia</h2>
           <p className="bs-dedica-desc">
@@ -177,8 +186,8 @@ function LandingPage() {
         </div>
 
         <div className="bs-cards-grid">
-          {PROFILE_CARDS.map((card) => (
-            <div key={card.title} className="bs-card">
+          {PROFILE_CARDS.map((card, i) => (
+            <div key={card.title} className="bs-card" data-reveal="pop" style={revealDelay(i)}>
               <div className="bs-card-icon">
                 <svg width="28" height="28" {...svgProps}>
                   {card.icon}
@@ -190,11 +199,11 @@ function LandingPage() {
           ))}
         </div>
 
-        <div className="bs-features-block">
+        <div className="bs-features-block" data-reveal>
           <div className="bs-features-title">Lo que vigila, con sensores reales</div>
           <div className="bs-pill-list">
-            {SENSORS.map((sensor) => (
-              <div key={sensor.label} className="bs-pill">
+            {SENSORS.map((sensor, i) => (
+              <div key={sensor.label} className="bs-pill" data-reveal="pop" style={revealDelay(i)}>
                 <svg width="20" height="20" {...svgProps}>
                   {sensor.icon}
                 </svg>
@@ -205,11 +214,11 @@ function LandingPage() {
         </div>
 
         <div className="bs-alert-boxes">
-          <div className="bs-alert-box bs-alert-ok">
+          <div className="bs-alert-box bs-alert-ok" data-reveal="izquierda">
             <div className="bs-alert-heading">“Estoy bien”</div>
             <p>Un toque para decirle a la familia que todo está en orden.</p>
           </div>
-          <div className="bs-alert-box bs-alert-help">
+          <div className="bs-alert-box bs-alert-help" data-reveal="derecha" style={revealDelay(1)}>
             <div className="bs-alert-heading">“Necesito ayuda”</div>
             <p>Un toque para pedir ayuda, con alertas por voz y vibración que no se pasan por alto.</p>
           </div>
@@ -218,13 +227,13 @@ function LandingPage() {
 
       <section id="origen" className="bs-origin-section">
         <div className="bs-container bs-origin-grid">
-          <div className="bs-section-intro">
+          <div className="bs-section-intro" data-reveal="izquierda">
             <div className="bs-section-tag">03 · Cómo nació</div>
             <h2 className="bs-section-title">De una preocupación a una app</h2>
           </div>
           <div className="bs-steps-grid">
-            {STEPS.map((step) => (
-              <div key={step.num} className="bs-step-card">
+            {STEPS.map((step, i) => (
+              <div key={step.num} className="bs-step-card" data-reveal="izquierda" style={revealDelay(i)}>
                 <div className="bs-step-num">{step.num}</div>
                 <h3>{step.title}</h3>
                 <p>{step.text}</p>
@@ -237,7 +246,7 @@ function LandingPage() {
       <ContactSection />
 
       <footer className="bs-footer">
-        <div className="bs-container bs-footer-cta">
+        <div className="bs-container bs-footer-cta" data-reveal="pop">
           <h2>Cuidar a tu familia cabe en un teléfono</h2>
           <Link className="bs-cta" to="/demo">
             Probar BioSync

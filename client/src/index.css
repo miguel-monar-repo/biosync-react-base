@@ -1,3 +1,4 @@
-/* Estilos globales: primero las variables, después la base */
+/* Estilos globales: primero las variables, después la base y las animaciones compartidas */
 @import './styles/variables.css';
 @import './styles/base.css';
+@import './styles/animations.css';

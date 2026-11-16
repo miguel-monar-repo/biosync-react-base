@@ -363,6 +363,76 @@
   flex-direction: column;
 }
 
+/* ---------- Animaciones de la demo y la app ---------- */
+
+/* Al cambiar de perfil, el encabezado y las tarjetas aparecen subiendo, una tras otra.
+   Usa `translate` para no chocar con el efecto al pasar el mouse, que usa `transform`. */
+.dashboard .dash-head,
+.dashboard .card {
+  animation: tarjeta-entra 0.45s ease-out both;
+}
+
+.dashboard .grid > .card:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.dashboard .grid > .card:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+.dashboard .grid > .card:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+.dashboard .grid > .card:nth-child(n + 5) {
+  animation-delay: 280ms;
+}
+
+@keyframes tarjeta-entra {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.dashboard .card {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Solo con mouse: en el teléfono el efecto se quedaría "pegado" al tocar */
+@media (hover: hover) {
+  .dashboard .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-40);
+    box-shadow: 0 10px 28px var(--shadow);
+  }
+
+  /* .profile-btn ya tiene "transition: all", así que el desplazamiento también se anima */
+  .profile-btn:hover {
+    transform: translateX(3px);
+  }
+}
+
+/* Si la persona pidió menos animaciones en su sistema, las tarjetas aparecen quietas */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard .dash-head,
+  .dashboard .card {
+    animation: none;
+  }
+
+  .dashboard .card:hover,
+  .profile-btn:hover {
+    transform: none;
+  }
+}
+
 .card.wide {
   grid-column: 1 / -1;
 }

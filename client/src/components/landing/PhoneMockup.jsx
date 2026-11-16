@@ -31,7 +31,9 @@ function PhoneMockup() {
   }
 
   return (
-    <div className="bs-phone-wrapper">
+    // data-reveal: entra desde la derecha (useScrollReveal en LandingPage); el teléfono
+    // de adentro sigue con su animación de flotar
+    <div className="bs-phone-wrapper" data-reveal="derecha">
       <div className="bs-phone-container">
         <div className="bs-ring bs-ring-1"></div>
         <div className="bs-ring bs-ring-2"></div>

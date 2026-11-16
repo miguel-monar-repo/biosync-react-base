@@ -26,8 +26,13 @@ function PlansPage() {
         </header>
 
         <ul className="planes-grid">
-          {PLANES_APP.map((plan) => (
-            <li key={plan.id} className={`planes-card${plan.id === 'familiar' ? ' destacado' : ''}`}>
+          {/* --i: posición de la tarjeta, para que caigan una tras otra (ver PlansPage.css) */}
+          {PLANES_APP.map((plan, i) => (
+            <li
+              key={plan.id}
+              className={`planes-card${plan.id === 'familiar' ? ' destacado' : ''}`}
+              style={{ '--i': i }}
+            >
               {plan.id === 'familiar' && <span className="planes-etiqueta">Recomendado</span>}
               <h2>{plan.nombre}</h2>
               <p className="planes-precio">

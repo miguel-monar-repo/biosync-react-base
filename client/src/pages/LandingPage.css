@@ -618,6 +618,51 @@
   color: var(--landing-text-4);
 }
 
+/* ========== EFECTOS AL PASAR EL MOUSE ========== */
+.bs-card,
+.bs-step-card,
+.bs-alert-box,
+.bs-pill,
+.bs-card-icon,
+.bs-main-container .bs-btn-outline {
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* Solo en dispositivos con mouse: en el teléfono el efecto se quedaría "pegado" al tocar */
+@media (hover: hover) {
+  .bs-card:hover,
+  .bs-step-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--brand);
+    box-shadow: 0 16px 40px var(--shadow);
+  }
+
+  .bs-card:hover .bs-card-icon {
+    transform: scale(1.1) rotate(-6deg);
+  }
+
+  .bs-alert-box:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 16px 40px var(--shadow);
+  }
+
+  .bs-pill:hover {
+    transform: translateY(-3px);
+    background: var(--brand-dark);
+    color: var(--brand-pale);
+  }
+
+  .bs-main-container .bs-btn-outline:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+    transform: translateY(-2px);
+  }
+}
+
 /* ========== TABLET Y COMPUTADORA: tamaños originales del prototipo ========== */
 @media (min-width: 768px) {
   .bs-nav {
@@ -708,5 +753,16 @@
   .bs-ring,
   .bs-phone {
     animation: none;
+  }
+
+  /* Los efectos al pasar el mouse cambian de color, pero sin moverse */
+  .bs-card:hover,
+  .bs-step-card:hover,
+  .bs-alert-box:hover,
+  .bs-pill:hover,
+  .bs-card:hover .bs-card-icon,
+  .bs-main-container .bs-btn-outline:hover,
+  .bs-main-container .bs-cta:hover {
+    transform: none;
   }
 }

@@ -102,6 +102,67 @@
   border-color: var(--brand);
 }
 
+/* ---------- Animaciones de las tarjetas ---------- */
+
+/* Cada tarjeta cae desde arriba, una tras otra (--i viene de PlansPage.jsx), con un pequeño rebote.
+   Usa `translate` para no chocar con el efecto al pasar el mouse, que usa `transform`. */
+.planes-card {
+  animation: plan-cae 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--i, 0) * 150ms) both;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+@keyframes plan-cae {
+  from {
+    opacity: 0;
+    translate: 0 -80px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.planes-intro {
+  animation: planes-aparece 0.5s ease-out both;
+}
+
+@keyframes planes-aparece {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Solo con mouse: en el teléfono el efecto se quedaría "pegado" al tocar */
+@media (hover: hover) {
+  .planes-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--brand);
+    box-shadow: 0 18px 44px var(--shadow);
+  }
+
+  .planes-card.destacado:hover {
+    box-shadow:
+      0 18px 44px var(--shadow),
+      0 0 0 4px var(--brand-20);
+  }
+
+  .planes .planes-comprar {
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .planes-card:hover .planes-comprar {
+    transform: scale(1.03);
+  }
+}
+
 .planes-etiqueta {
   align-self: flex-start;
   padding: 4px 12px;
@@ -185,5 +246,18 @@
 
   .planes-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Si la persona pidió menos animaciones en su sistema, las tarjetas aparecen quietas */
+@media (prefers-reduced-motion: reduce) {
+  .planes-card,
+  .planes-intro {
+    animation: none;
+  }
+
+  .planes-card:hover,
+  .planes-card:hover .planes-comprar {
+    transform: none;
   }
 }
