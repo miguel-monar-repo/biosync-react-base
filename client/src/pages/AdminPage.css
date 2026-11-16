@@ -1,0 +1,387 @@
+/*
+  Panel de administración (/admin). MOBILE FIRST:
+  todo en una columna en teléfono; desde 769px la cabecera va en fila y la lista en dos columnas.
+  Usa los colores de la app (variables.css) y las clases .btn y .card de DashboardPage.css.
+*/
+
+.admin {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-app);
+}
+
+/* ---------- Cabecera ---------- */
+
+.admin-header {
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-user {
+  color: var(--text-secondary);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.admin-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin .btn {
+  min-height: 44px;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.admin .btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.admin .admin-btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.admin .admin-btn-secondary:hover {
+  background: var(--bg-tertiary);
+}
+
+/* ---------- Contenido ---------- */
+
+.admin-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Pestañas: Mensajes / Usuarios ---------- */
+
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-tab {
+  min-height: 44px;
+  margin-bottom: -1px;
+  padding: 10px 16px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-tab.active {
+  border-bottom-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-summary {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.admin-toolbar h2 {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-filter {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.admin-filter.active {
+  background: var(--primary-15);
+  border-color: var(--primary-40);
+  color: var(--text-primary);
+}
+
+.admin-count {
+  margin-left: 4px;
+  font-weight: 600;
+}
+
+.admin-state {
+  padding: 32px 16px;
+  color: var(--text-secondary);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ---------- Tarjetas de mensajes ---------- */
+
+.admin-list {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.admin-card {
+  gap: 10px;
+  min-width: 0;
+}
+
+.admin-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.admin-badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--warning-20);
+  color: var(--warning);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.admin-badge.done {
+  background: var(--success-20);
+  color: var(--success);
+}
+
+.admin-badge.role-admin {
+  background: var(--primary-15);
+  color: var(--primary);
+}
+
+.admin-badge.role-user {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.admin-warning {
+  color: var(--warning);
+}
+
+/* Marca "Tú" junto al nombre del usuario con la sesión abierta */
+.admin-tag {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.admin-date {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.admin-data {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  font-size: 13px;
+}
+
+.admin-data dt {
+  color: var(--text-secondary);
+}
+
+.admin-data dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.admin-data a {
+  color: var(--primary);
+}
+
+.admin-message {
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--bg-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.admin-confirm {
+  width: 100%;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ---------- Formulario de usuario ---------- */
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-form h3 {
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.admin-field {
+  margin-bottom: 8px;
+}
+
+.admin-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.admin-field input,
+.admin-field select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+}
+
+.admin-field input:focus,
+.admin-field select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-20);
+}
+
+.admin-field select:disabled {
+  opacity: 0.6;
+}
+
+.admin-field [aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.admin-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* Texto de ayuda debajo del campo; en rojo cuando el campo tiene un error */
+.admin-field-error {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.admin-field-error:empty {
+  display: none;
+}
+
+.admin-field:has([aria-invalid='true']) .admin-field-error {
+  color: var(--danger);
+}
+
+.admin-form-error {
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  background: var(--danger-05);
+  font-size: 13px;
+}
+
+/* ---------- Computadora ---------- */
+
+@media (min-width: 769px) {
+  .admin-header {
+    padding: 16px 24px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .admin-main {
+    padding: 28px 24px 48px;
+  }
+
+  .admin-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

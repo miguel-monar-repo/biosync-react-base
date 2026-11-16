@@ -31,8 +31,10 @@ Comandos (dentro de `api/`): `npm run dev` (lee el `.env` de la raíz, puerto 40
 ```text
 src/
 ├── main.jsx       punto de entrada, monta <App /> dentro de <BrowserRouter>
-├── App.jsx        rutas: "/" → LandingPage, "/app" → DashboardPage, "/politica-datos" → PrivacyPage
-├── pages/         pantallas completas + su CSS (LandingPage, DashboardPage, PrivacyPage)
+├── App.jsx        rutas: "/" → LandingPage, "/demo" → DashboardPage pública (3 perfiles),
+│                  "/login" → LoginPage, "/app" → DashboardPage con login (solo el plan del usuario),
+│                  "/admin" → AdminPage (solo admin, sin enlaces), "/politica-datos" → PrivacyPage
+├── pages/         pantallas completas + su CSS (Landing, Dashboard, Login, Admin, Privacy)
 ├── components/    piezas reutilizables (Icon, AlertBanner, ToastList, Topbar...)
 │   ├── profiles/  los 3 perfiles de la demo (Sport, Senior, Kid)
 │   └── landing/   piezas de la landing (PhoneMockup, ContactSection)

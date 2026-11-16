@@ -111,6 +111,10 @@ function LandingPage() {
           <a href="#dedica">A qué nos dedicamos</a>
           <a href="#origen">Cómo nació</a>
           <a href="#contacto">Contacto</a>
+          <Link to="/planes">Planes</Link>
+          <Link className="bs-nav-login" to="/login">
+            Ingresar
+          </Link>
         </div>
       </nav>
 
@@ -128,8 +132,8 @@ function LandingPage() {
             cuando algo no va bien.
           </p>
           <div className="bs-hero-actions">
-            {/* Link cambia de página sin recargar (React Router) */}
-            <Link className="bs-cta" to="/app">
+            {/* Link cambia de página sin recargar (React Router). La demo es pública, sin login */}
+            <Link className="bs-cta" to="/demo">
               Probar la demo
             </Link>
             <a className="bs-btn-outline" href="#dedica">
@@ -235,7 +239,7 @@ function LandingPage() {
       <footer className="bs-footer">
         <div className="bs-container bs-footer-cta">
           <h2>Cuidar a tu familia cabe en un teléfono</h2>
-          <Link className="bs-cta" to="/app">
+          <Link className="bs-cta" to="/demo">
             Probar BioSync
           </Link>
         </div>

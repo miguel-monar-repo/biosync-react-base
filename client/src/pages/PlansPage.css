@@ -1,0 +1,189 @@
+/*
+  Planes (/planes) y formulario de compra (/comprar). MOBILE FIRST:
+  una columna en teléfono, dos desde 640px y cuatro planes en fila desde 1024px.
+  Usa los colores y fuentes de la landing (variables.css).
+*/
+
+.planes {
+  min-height: 100vh;
+  background: var(--landing-bg);
+  color: var(--landing-text);
+  font-family: var(--font-landing);
+  line-height: 1.5;
+}
+
+.planes a {
+  color: var(--brand);
+  text-decoration: none;
+}
+
+.planes h1,
+.planes h2 {
+  font-family: var(--font-landing-title);
+  line-height: 1.15;
+}
+
+/* ---------- Navegación ---------- */
+
+.planes-nav {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 20px 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.planes .planes-logo {
+  color: var(--landing-text);
+  font-family: var(--font-landing-title);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.planes-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.planes .planes-nav-links a {
+  padding: 10px 14px;
+  color: var(--landing-text-2);
+}
+
+/* ---------- Planes ---------- */
+
+.planes-main {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 40px 16px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.planes-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 640px;
+}
+
+.planes-intro h1 {
+  font-size: clamp(2.25rem, 8vw, 3.5rem);
+}
+
+.planes-intro p {
+  color: var(--landing-text-3);
+  font-size: 18px;
+}
+
+.planes-grid {
+  list-style: none;
+  display: grid;
+  gap: 16px;
+}
+
+.planes-card {
+  position: relative;
+  padding: 24px 20px;
+  border: 1px solid var(--landing-line);
+  border-radius: 20px;
+  background: var(--landing-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.planes-card.destacado {
+  border-color: var(--brand);
+}
+
+.planes-etiqueta {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--brand-dark);
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.planes-card h2 {
+  font-size: 24px;
+}
+
+.planes-precio {
+  font-family: var(--font-landing-title);
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.planes-precio span {
+  color: var(--landing-text-4);
+  font-family: var(--font-landing);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.planes-descripcion {
+  color: var(--landing-text-3);
+}
+
+.planes-incluye {
+  padding-left: 20px;
+  color: var(--landing-text-2);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.planes-incluye li::marker {
+  color: var(--brand);
+}
+
+.planes .planes-comprar {
+  margin-top: auto;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: var(--brand);
+  color: var(--landing-bg);
+  font-family: var(--font-landing-title);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.planes .planes-comprar:hover {
+  background: var(--brand-light);
+}
+
+.planes-nota {
+  color: var(--landing-text-4);
+  font-size: 14px;
+}
+
+@media (min-width: 640px) {
+  .planes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .planes-nav {
+    padding: 28px 24px 0;
+  }
+
+  .planes-main {
+    padding: 72px 24px 96px;
+  }
+
+  .planes-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
