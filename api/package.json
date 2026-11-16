@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch --env-file=../.env index.js",
-    "start": "node --env-file=../.env index.js"
+    "start": "node --env-file=../.env index.js",
+    "crear-usuario": "node --env-file=../.env scripts/crear-usuario.js"
   },
   "dependencies": {
     "express": "^5.3.0",
