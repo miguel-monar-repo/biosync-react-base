@@ -1,10 +1,13 @@
 import { Link } from 'react-router'
-import { formatearPrecio, PLANES_APP } from '../../../shared/planes.mjs'
+import PlanCard from '../components/PlanCard.jsx'
+import { usePlans } from '../context/PlansContext.js'
 import './PlansPage.css'
 
-// Página de planes y precios (ruta /planes). "Comprar" lleva al formulario de compra
-// con el plan ya elegido (/comprar?plan=...). Los precios están en shared/planes.mjs.
+// Página de planes y precios (ruta /planes). Los planes vienen de MongoDB (colección "planes");
+// cada uno se dibuja con <PlanCard>. "Comprar" lleva al formulario con el plan ya elegido.
 function PlansPage() {
+  const { plans, status, retry } = usePlans()
+
   return (
     <div className="planes">
       <title>BioSync, Planes</title>
@@ -25,31 +28,24 @@ function PlansPage() {
           <p>Un mismo teléfono, el cuidado que tu familia necesita. Paga mes a mes y cancela cuando quieras.</p>
         </header>
 
-        <ul className="planes-grid">
-          {/* --i: posición de la tarjeta, para que caigan una tras otra (ver PlansPage.css) */}
-          {PLANES_APP.map((plan, i) => (
-            <li
-              key={plan.id}
-              className={`planes-card${plan.id === 'familiar' ? ' destacado' : ''}`}
-              style={{ '--i': i }}
-            >
-              {plan.id === 'familiar' && <span className="planes-etiqueta">Recomendado</span>}
-              <h2>{plan.nombre}</h2>
-              <p className="planes-precio">
-                {formatearPrecio(plan.precio)} <span>/ mes</span>
-              </p>
-              <p className="planes-descripcion">{plan.descripcion}</p>
-              <ul className="planes-incluye">
-                {plan.incluye.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-              <Link className="planes-comprar" to={`/comprar?plan=${plan.id}`}>
-                Comprar
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {status === 'loading' && <p className="planes-estado">Cargando planes…</p>}
+
+        {status === 'error' && (
+          <div className="planes-estado" role="alert">
+            <p>No pudimos cargar los planes. Revisa tu conexión.</p>
+            <button type="button" className="planes-comprar planes-reintentar" onClick={retry}>
+              Reintentar
+            </button>
+          </div>
+        )}
+
+        {status === 'ready' && (
+          <ul className="planes-grid">
+            {plans.map((plan, i) => (
+              <PlanCard key={plan.id} plan={plan} posicion={i} />
+            ))}
+          </ul>
+        )}
 
         <p className="planes-nota">Precios en dólares estadounidenses (USD), la moneda oficial de Ecuador.</p>
       </main>
