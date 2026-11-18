@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch --env-file=../.env index.js",
     "start": "node --env-file=../.env index.js",
-    "crear-usuario": "node --env-file=../.env scripts/crear-usuario.js"
+    "crear-usuario": "node --env-file=../.env scripts/crear-usuario.js",
+    "cargar-planes": "node --env-file=../.env scripts/cargar-planes.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.9.0",

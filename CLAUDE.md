@@ -24,7 +24,10 @@ Comandos (dentro de `client/`): `npm run dev`, `npm run build`, `npm run lint`.
 Comandos (dentro de `api/`): `npm run dev` (lee el `.env` de la raíz, puerto 4000).
 
 - `shared/validacionContacto.mjs`: reglas del formulario, las usan el navegador y la API.
-- `shared/planes.mjs`: planes y precios. El chatbot arma sus instrucciones con estos datos.
+- Planes: viven en la colección `planes` de MongoDB (se cambian en la base, no en el código).
+  La API los entrega en `GET /api/planes` (`api/planes.js`, 1 minuto en memoria); la web los
+  comparte con `usePlans()` (`PlansProvider`) y cada tarjeta es `<PlanCard plan={...} />`.
+  `shared/planes.mjs` solo tiene funciones de ayuda. Primera carga: `npm run cargar-planes` en `api/`.
 - Chatbot: `ANTHROPIC_API_KEY` va solo en el `.env` de la raíz y en el proyecto de la API en Vercel
   (nunca con prefijo `VITE_`). Solo responde sobre BioSync; fuera de tema dice
   "Lo siento, no conozco sobre eso. Pregúntame sobre BioSync." No se muestra en el panel.

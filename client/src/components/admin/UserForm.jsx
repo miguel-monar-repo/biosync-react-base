@@ -1,5 +1,5 @@
 import { useId, useState } from 'react'
-import { PLANES_APP } from '../../../../shared/planes.mjs'
+import { usePlans } from '../../context/PlansContext.js'
 
 // Formulario para crear un usuario (sin `user`) o editarlo (con `user`).
 // `onSave(datos)` recibe solo lo que hay que enviar a la API; si la API responde con errores,
@@ -18,6 +18,7 @@ function generatePassword() {
 // `defaults`: al crear, datos que ya vienen llenos (por ejemplo, el correo y el plan de una compra)
 function UserForm({ user, defaults, isSelf = false, onSave, onCancel }) {
   const id = useId()
+  const { plans } = usePlans() // planes activos de MongoDB
   const isNew = !user
   const initial = user ? { ...EMPTY, ...user, plan: user.plan ?? '', contrasena: '' } : { ...EMPTY, ...defaults }
   const [values, setValues] = useState(initial)
@@ -105,7 +106,7 @@ function UserForm({ user, defaults, isSelf = false, onSave, onCancel }) {
           <label htmlFor={`${id}-plan`}>Plan</label>
           <select {...fieldProps('plan')}>
             <option value="">Elige un plan</option>
-            {PLANES_APP.map((p) => (
+            {plans.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.nombre}
               </option>

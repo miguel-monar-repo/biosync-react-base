@@ -1,19 +1,23 @@
 // Reglas del formulario de compra de un plan, compartidas por el navegador y la API.
 // Reutiliza las reglas de correo, celular y consentimiento del formulario de contacto.
-import { ID_PLANES } from './planes.mjs'
+// Los planes válidos vienen de MongoDB (colección "planes"), así que se pasan como parámetro.
 import { reglas } from './validacionContacto.mjs'
 
-export const reglasCompra = {
-  plan(valor) {
-    const ok = ID_PLANES.includes(valor)
-    return { valor: ok ? valor : null, error: ok ? null : 'Elige un plan.' }
-  },
-  email: reglas.email,
-  celular: reglas.celular,
-  consentimiento: reglas.consentimiento,
+// idsPlanes: códigos de los planes activos, por ejemplo ['deportivo', 'familiar']
+export function crearReglasCompra(idsPlanes) {
+  return {
+    plan(valor) {
+      const ok = idsPlanes.includes(valor)
+      return { valor: ok ? valor : null, error: ok ? null : 'Elige un plan.' }
+    },
+    email: reglas.email,
+    celular: reglas.celular,
+    consentimiento: reglas.consentimiento,
+  }
 }
 
-export function validarCompra(datos) {
+export function validarCompra(datos, idsPlanes) {
+  const reglasCompra = crearReglasCompra(idsPlanes)
   const limpios = {}
   const errores = {}
   for (const campo of Object.keys(reglasCompra)) {

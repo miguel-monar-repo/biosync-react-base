@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { buscarPlan, formatearPrecio } from '../../../../shared/planes.mjs'
+import { usePlans } from '../../context/PlansContext.js'
 import { useAuth } from '../../context/AuthContext.js'
 import { useToast } from '../../context/ToastContext.js'
 import { createUser, deletePurchase, listPurchases, setPurchaseAttended } from '../../services/admin.js'
@@ -18,6 +19,7 @@ const FILTERS = [
 function PurchasesPanel() {
   const { logout } = useAuth()
   const showToast = useToast()
+  const { plans } = usePlans() // para mostrar el nombre y el precio del plan de cada solicitud
 
   const [purchases, setPurchases] = useState([])
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
@@ -150,7 +152,7 @@ function PurchasesPanel() {
       {status === 'ready' && visible.length > 0 && (
         <ul className="admin-list">
           {visible.map((c) => {
-            const plan = buscarPlan(c.plan)
+            const plan = buscarPlan(plans, c.plan)
             return (
               <li key={c._id} className="card admin-card">
                 {creatingFor === c._id ? (

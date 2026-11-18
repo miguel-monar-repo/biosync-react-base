@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { nombrePlan, perfilesPermitidos } from '../../../shared/planes.mjs'
+import { nombrePlan, perfilesPermitidos, TODOS_LOS_PERFILES } from '../../../shared/planes.mjs'
 import AudioBar from '../components/AudioBar.jsx'
 import FamilyBar from '../components/FamilyBar.jsx'
 import KidProfile from '../components/profiles/KidProfile.jsx'
@@ -10,6 +10,7 @@ import Topbar from '../components/Topbar.jsx'
 import { AlertBannerProvider } from '../context/AlertBannerProvider.jsx'
 import { useAuth } from '../context/AuthContext.js'
 import { FamilyProvider } from '../context/FamilyProvider.jsx'
+import { usePlans } from '../context/PlansContext.js'
 import { useAudioStatus } from '../hooks/useAudioStatus.js'
 import { useBattery } from '../hooks/useBattery.js'
 import { useFallDetection } from '../hooks/useFallDetection.js'
@@ -26,12 +27,9 @@ const DEMO_MEDS = [
   { name: 'Vitamina D', time: '20:00', done: false },
 ]
 
-// Todos los perfiles: los ve la demo pública (/demo) y los admin
-const ALL_PROFILES = perfilesPermitidos({ rol: 'admin' })
-
 // La misma pantalla sirve para dos rutas:
 //   /demo (demo={true}): pública, sin login, con todos los perfiles ("Probar la demo")
-//   /app: con login; cada usuario ve solo los perfiles de su plan (ver shared/planes.mjs)
+//   /app: con login; cada usuario ve solo los perfiles de su plan (los planes vienen de MongoDB)
 // Los providers dan acceso al banner de alerta y a la familia a todo lo que está dentro
 function DashboardPage({ demo = false }) {
   return (
@@ -45,7 +43,11 @@ function DashboardPage({ demo = false }) {
 
 function Dashboard({ demo }) {
   const { user } = useAuth()
-  const allowed = demo ? ALL_PROFILES : perfilesPermitidos(user)
+  const { plans, status: plansStatus, retry: retryPlans } = usePlans()
+  // La demo y los admin ven todos los perfiles; el resto, los de su plan
+  const allowed = demo ? TODOS_LOS_PERFILES : perfilesPermitidos(user, plans)
+  // Un usuario normal necesita los planes de la base para saber qué perfil ver
+  const needsPlans = !demo && user?.rol !== 'admin'
   const [selected, setSelected] = useState(allowed[0] ?? null)
   // Si el plan cambia mientras la app está abierta, se vuelve a un perfil permitido
   const profile = allowed.includes(selected) ? selected : allowed[0]
@@ -66,7 +68,32 @@ function Dashboard({ demo }) {
     setMeds((list) => list.map((m, i) => (i === index ? { ...m, done: !m.done } : m)))
   }
 
-  // Usuario sin plan asignado: no ve ningún perfil (en la demo nunca pasa)
+  // Mientras llegan los planes (o si no cargan), un aviso en lugar de los perfiles
+  if (needsPlans && plansStatus !== 'ready') {
+    return (
+      <div className="app">
+        <title>BioSync — Familia conectada desde el teléfono</title>
+        <Topbar showSession />
+        <main className="dashboard">
+          <div className="card no-plan">
+            {plansStatus === 'loading' ? (
+              <p>Cargando tu plan…</p>
+            ) : (
+              <>
+                <h2>No pudimos cargar tu plan</h2>
+                <p>Revisa tu conexión e inténtalo de nuevo.</p>
+                <button type="button" className="btn" onClick={retryPlans}>
+                  Reintentar
+                </button>
+              </>
+            )}
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  // Usuario sin plan asignado (o con un plan que ya no está activo): no ve ningún perfil
   if (allowed.length === 0) {
     return (
       <div className="app">
@@ -96,7 +123,7 @@ function Dashboard({ demo }) {
           profiles={allowed}
           profile={profile}
           onChange={setSelected}
-          planName={demo || user?.rol === 'admin' ? null : nombrePlan(user?.plan)}
+          planName={demo || user?.rol === 'admin' ? null : nombrePlan(plans, user?.plan)}
         />
 
         <main className="dashboard">

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router'
 import ChatWidget from './components/ChatWidget.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { AuthProvider } from './context/AuthProvider.jsx'
+import { PlansProvider } from './context/PlansProvider.jsx'
 import { ToastProvider } from './context/ToastProvider.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import CheckoutPage from './pages/CheckoutPage.jsx'
@@ -28,36 +29,39 @@ function App() {
   return (
     <ToastProvider>
       <AuthProvider>
-        <div key={pathname} className="page-transition">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/demo" element={<DashboardPage demo />} />
-            <Route path="/planes" element={<PlansPage />} />
-            <Route path="/comprar" element={<CheckoutPage />} />
-            <Route
-              path="/app"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute role="admin">
-                  <AdminPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/politica-datos" element={<PrivacyPage />} />
-            {/* Cualquier otra dirección vuelve al inicio */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-        {/* Asistente virtual: botón flotante en todas las páginas (se oculta solo en el panel) */}
-        <ChatWidget />
+        {/* Los planes se traen de MongoDB una vez y los usan planes, compra, app y panel */}
+        <PlansProvider>
+          <div key={pathname} className="page-transition">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/demo" element={<DashboardPage demo />} />
+              <Route path="/planes" element={<PlansPage />} />
+              <Route path="/comprar" element={<CheckoutPage />} />
+              <Route
+                path="/app"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute role="admin">
+                    <AdminPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/politica-datos" element={<PrivacyPage />} />
+              {/* Cualquier otra dirección vuelve al inicio */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </div>
+          {/* Asistente virtual: botón flotante en todas las páginas (se oculta solo en el panel) */}
+          <ChatWidget />
+        </PlansProvider>
       </AuthProvider>
     </ToastProvider>
   )
