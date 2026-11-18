@@ -13,6 +13,7 @@ import { validarCompra } from '../shared/validacionCompra.mjs'
 import { validarContacto } from '../shared/validacionContacto.mjs'
 import { chatbotDisponible, responderChat } from './chatbot.js'
 import { hashContrasena, verificarContrasena } from './contrasenas.js'
+import { leerPlanes } from './planes.js'
 import { errorDePlan, validarUsuario } from './usuarios.js'
 
 const EN_VERCEL = Boolean(process.env.VERCEL) // Vercel define VERCEL=1 automáticamente
@@ -47,6 +48,7 @@ function conectar() {
       return {
         contactos: db.collection(process.env.MONGODB_COLLECTION || 'contacts'),
         compras: db.collection('compras'),
+        planes: db.collection('planes'),
         envios,
         usuarios,
         sesiones,
@@ -182,6 +184,18 @@ async function requiereSesion(req, res, next) {
 app.get('/', (req, res) => {
   res.json({ servicio: 'BioSync API', estado: 'ok' })
 })
+
+// Planes activos, leídos de MongoDB (colección "planes"). Es pública: la usa la página de planes.
+app.get('/api/planes', async (req, res) => {
+  const { planes } = await conectar()
+  res.json({ planes: await leerPlanes(planes) })
+})
+
+// Planes activos, para validar compras y usuarios y para el chatbot
+async function planesActivos() {
+  const { planes } = await conectar()
+  return leerPlanes(planes)
+}
 
 app.post('/api/contact', limitarEnvios, async (req, res) => {
   const cuerpo = req.body || {}
