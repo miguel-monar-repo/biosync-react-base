@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { nombrePlan } from '../../../../shared/planes.mjs'
+import { usePlans } from '../../context/PlansContext.js'
 import { useAuth } from '../../context/AuthContext.js'
 import { useToast } from '../../context/ToastContext.js'
 import { createUser, deleteUser, listUsers, updateUser } from '../../services/admin.js'
@@ -10,6 +11,7 @@ import UserForm from './UserForm.jsx'
 // La API no deja que un admin se borre ni se quite el rol a sí mismo, ni que se quede sin admins.
 function UsersPanel() {
   const { user: me, logout, updateUser: updateSessionUser } = useAuth()
+  const { plans } = usePlans() // para mostrar el nombre del plan de cada usuario
   const showToast = useToast()
 
   const [users, setUsers] = useState([])
@@ -173,7 +175,8 @@ function UsersPanel() {
                         {u.rol === 'admin' ? (
                           'Todos (admin)'
                         ) : u.plan ? (
-                          nombrePlan(u.plan)
+                          // Si el plan ya no está activo en la base, se muestra su código
+                          nombrePlan(plans, u.plan) ?? u.plan
                         ) : (
                           <span className="admin-warning">Sin plan: no verá ningún perfil</span>
                         )}

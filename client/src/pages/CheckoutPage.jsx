@@ -1,22 +1,22 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import { buscarPlan, formatearPrecio, ID_PLANES, PLANES_APP } from '../../../shared/planes.mjs'
+import { buscarPlan, formatearPrecio } from '../../../shared/planes.mjs'
 import { crearReglasCompra } from '../../../shared/validacionCompra.mjs'
 import { avisos } from '../../../shared/validacionContacto.mjs'
+import { usePlans } from '../context/PlansContext.js'
 import { sendPurchase } from '../services/purchases.js'
 import './PlansPage.css'
 import './CheckoutPage.css'
 
 // Formulario de compra (ruta /comprar?plan=...). Llega con el plan ya elegido desde /planes.
-// Guarda la solicitud en la API; el equipo crea el usuario desde el panel y le envía
-// la contraseña y el método de pago al correo indicado.
+// Los planes vienen de MongoDB (usePlans). Guarda la solicitud en la API; el equipo crea el
+// usuario desde el panel y le envía la contraseña y el método de pago al correo indicado.
 const CAMPOS = ['plan', 'email', 'confirmEmail', 'celular', 'consentimiento']
 const ERROR_ENVIO = 'No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo.'
 const ERROR_CONFIRMACION = 'Los dos correos no coinciden.'
-const reglasCompra = crearReglasCompra(ID_PLANES)
 
 // Reglas de cada campo: las de shared/validacionCompra.mjs más la confirmación del correo
-function validarCampo(campo, valores) {
+function validarCampo(campo, valores, reglasCompra) {
   if (campo === 'confirmEmail') {
     const a = reglasCompra.email(valores.email).valor
     const b = reglasCompra.email(valores.confirmEmail).valor
@@ -28,10 +28,13 @@ function validarCampo(campo, valores) {
 function CheckoutPage() {
   const id = useId()
   const [searchParams] = useSearchParams()
-  const planInicial = buscarPlan(searchParams.get('plan'))?.id ?? ''
+  const { plans, status: estadoPlanes } = usePlans()
+  // Las reglas aceptan solo los planes activos de la base
+  const reglasCompra = useMemo(() => crearReglasCompra(plans.map((p) => p.id)), [plans])
 
   const [valores, setValores] = useState({
-    plan: planInicial,
+    // El plan elegido en /planes; se valida con la lista de la base al enviar
+    plan: searchParams.get('plan') ?? '',
     email: '',
     confirmEmail: '',
     celular: '',
@@ -60,14 +63,14 @@ function CheckoutPage() {
     if (name === 'website') return
     // Checkbox y select se validan al cambiar; el resto, solo si ya tenían error
     if (type === 'checkbox' || tagName === 'SELECT' || errores[name]) {
-      setErrores((prev) => ({ ...prev, [name]: validarCampo(name, nuevos) }))
+      setErrores((prev) => ({ ...prev, [name]: validarCampo(name, nuevos, reglasCompra) }))
     }
   }
 
   function manejarBlur(e) {
     const { name, type, tagName } = e.target
     if (type === 'checkbox' || tagName === 'SELECT') return
-    setErrores((prev) => ({ ...prev, [name]: validarCampo(name, valores) }))
+    setErrores((prev) => ({ ...prev, [name]: validarCampo(name, valores, reglasCompra) }))
   }
 
   async function manejarEnvio(e) {
@@ -77,7 +80,7 @@ function CheckoutPage() {
 
     const nuevos = {}
     for (const campo of CAMPOS) {
-      const error = validarCampo(campo, valores)
+      const error = validarCampo(campo, valores, reglasCompra)
       if (error) nuevos[campo] = error
     }
     setErrores(nuevos)
@@ -92,7 +95,7 @@ function CheckoutPage() {
       // La confirmación del correo no se envía: solo sirve para revisar que esté bien escrito
       const { plan, email, celular, consentimiento, website } = valores
       await sendPurchase({ plan, email, celular, consentimiento, website })
-      setEnviado({ plan: buscarPlan(valores.plan), email: reglasCompra.email(valores.email).valor })
+      setEnviado({ plan: buscarPlan(plans, valores.plan), email: reglasCompra.email(valores.email).valor })
     } catch (error) {
       if (error.errores) {
         setErrores(error.errores)
@@ -121,7 +124,7 @@ function CheckoutPage() {
     </p>
   )
 
-  const plan = buscarPlan(valores.plan)
+  const plan = buscarPlan(plans, valores.plan)
   const avisoCelular = !errores.celular && valores.celular ? avisos.celular(valores.celular) : null
 
   return (
@@ -170,9 +173,15 @@ function CheckoutPage() {
             <form onSubmit={manejarEnvio} noValidate>
               <div className="compra-campo">
                 <label htmlFor={`${id}-plan`}>Plan</label>
-                <select {...props('plan')} value={valores.plan}>
-                  <option value="">Elige un plan</option>
-                  {PLANES_APP.map((p) => (
+                <select {...props('plan')} value={valores.plan} disabled={estadoPlanes !== 'ready'}>
+                  <option value="">
+                    {estadoPlanes === 'loading'
+                      ? 'Cargando planes…'
+                      : estadoPlanes === 'error'
+                        ? 'No pudimos cargar los planes'
+                        : 'Elige un plan'}
+                  </option>
+                  {plans.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.nombre} · {formatearPrecio(p.precio)} / mes
                     </option>
