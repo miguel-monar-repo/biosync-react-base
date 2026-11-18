@@ -102,7 +102,21 @@ Precios en dólares estadounidenses (USD), la moneda oficial de Ecuador, con pag
 | Adulto mayor | $5.99 / mes | Perfil Adulto mayor |
 | Familiar | $11.99 / mes | Los tres perfiles |
 
-Los planes y precios están definidos en un solo lugar: [`shared/planes.mjs`](shared/planes.mjs).
+Los planes viven en la colección **`planes`** de MongoDB: para cambiar un precio, una descripción o
+lo que incluye un plan, se edita en la base, sin tocar el código. La web, la API y el asistente
+virtual leen los cambios en menos de un minuto. Cada plan tiene:
+
+| Campo | Ejemplo | Para qué |
+|---|---|---|
+| `codigo` | `familiar` | Identificador fijo; se guarda en cada usuario y compra (no cambiarlo) |
+| `nombre` | `Familiar` | Nombre visible |
+| `precio` | `11.99` | Precio en USD al mes |
+| `descripcion` | `Los tres perfiles en una sola cuenta…` | Texto de la tarjeta |
+| `incluye` | `["Deportivo, Adulto mayor y Niño", …]` | Lista de beneficios |
+| `perfiles` | `["sport", "senior", "kid"]` | Perfiles que ve en la app |
+| `destacado` | `true` | Muestra la etiqueta "Recomendado" |
+| `orden` | `4` | Posición en la página |
+| `activo` | `true` | `false` lo oculta sin borrarlo |
 
 ---
 
@@ -151,7 +165,9 @@ biosync-react-base/
 | Archivo | Qué hace |
 |---|---|
 | `index.js` | La API: formulario de contacto, solicitudes de compra, asistente virtual, ingreso y cierre de sesión, y rutas del panel |
-| `chatbot.js` | Asistente virtual: instrucciones (armadas desde `shared/planes.mjs`) y llamada a la API de Claude |
+| `chatbot.js` | Asistente virtual: instrucciones (armadas con los planes de la base) y llamada a la API de Claude |
+| `planes.js` | Lee los planes activos de la colección `planes` (con 1 minuto de memoria) |
+| `scripts/cargar-planes.js` | Crea la colección `planes` con los planes iniciales (no pisa cambios hechos en la base) |
 | `contrasenas.js` | Hash y verificación de contraseñas con `scrypt` |
 | `usuarios.js` | Reglas de los usuarios: correo, rol, plan, contraseña |
 | `scripts/crear-usuario.js` | Crea o actualiza un usuario desde la terminal (por ejemplo, el primer admin) |
@@ -161,6 +177,7 @@ Rutas públicas de la API:
 | Método y ruta | Uso |
 |---|---|
 | `GET /` | Comprobar que la API está en línea |
+| `GET /api/planes` | Planes activos, desde MongoDB |
 | `POST /api/contact` | Enviar el formulario de contacto |
 | `POST /api/compras` | Enviar una solicitud de compra |
 | `POST /api/chat` | Preguntar al asistente virtual (máximo 20 preguntas cada 10 minutos) |
@@ -176,13 +193,14 @@ Las rutas del panel requieren una sesión con rol de administrador.
 |---|---|
 | `validacionContacto.mjs` | Reglas del formulario de contacto (nombre, correo, celular de Ecuador, mensaje) |
 | `validacionCompra.mjs` | Reglas del formulario de compra |
-| `planes.mjs` | Planes, precios y qué perfiles ve cada uno |
+| `planes.mjs` | Funciones de ayuda para los planes (precio con formato, qué perfiles ve cada usuario) |
 
 ### Datos (MongoDB)
 
 | Colección | Qué guarda |
 |---|---|
 | `contacts` | Mensajes del formulario de contacto |
+| `planes` | Planes: nombre, precio, descripción, beneficios y perfiles que incluye |
 | `compras` | Solicitudes de compra de planes |
 | `users` | Usuarios: correo, nombre, rol, plan y contraseña con hash |
 | `sesiones` | Sesiones abiertas (solo el hash del token) |
@@ -225,12 +243,17 @@ Requisitos: Node.js 22 o superior y una base de datos en MongoDB Atlas.
    de la web funciona igual y el asistente responde que no está disponible.
 3. Opcional: para sincronizar familias, copia `client/.env.example` como `client/.env` y completa los
    datos de Firebase.
-4. Crea el primer usuario administrador:
+4. Crea la colección de planes (solo la primera vez; si ya existe, no cambia nada):
+   ```bash
+   cd api
+   npm run cargar-planes
+   ```
+5. Crea el primer usuario administrador:
    ```bash
    cd api
    npm run crear-usuario -- --email tu@correo.com --nombre "Tu nombre" --rol admin
    ```
-5. Abre dos terminales:
+6. Abre dos terminales:
    ```bash
    cd api && npm run dev       # API en http://localhost:4000
    cd client && npm run dev    # Web en http://localhost:5173
