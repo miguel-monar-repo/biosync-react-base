@@ -226,7 +226,8 @@ app.post('/api/compras', limitarCompras, async (req, res) => {
     return res.status(201).json({ mensaje: 'Solicitud recibida' })
   }
 
-  const { datos, errores, valido } = validarCompra(cuerpo)
+  const idsPlanes = (await planesActivos()).map((p) => p.id)
+  const { datos, errores, valido } = validarCompra(cuerpo, idsPlanes)
   if (!valido) {
     return res.status(400).json({ errores })
   }
@@ -260,7 +261,7 @@ app.post('/api/chat', limitarChat, async (req, res) => {
   if (!chatbotDisponible()) return res.status(503).json({ error: ERROR_CHAT })
 
   try {
-    res.json({ respuesta: await responderChat(mensajes) })
+    res.json({ respuesta: await responderChat(mensajes, await planesActivos()) })
   } catch (error) {
     // Errores de la API de Claude (clave inválida, límite de uso, servicio caído...)
     if (error instanceof Anthropic.APIError) {
@@ -445,7 +446,7 @@ app.get('/api/admin/usuarios', async (req, res) => {
 
 // Crear usuario: { email, nombre, rol, contrasena }
 app.post('/api/admin/usuarios', async (req, res) => {
-  const { datos, errores } = validarUsuario(req.body || {}, { nuevo: true })
+  const { datos, errores } = validarUsuario(req.body || {}, { nuevo: true, planes: await planesActivos() })
   if (Object.keys(errores).length > 0) return res.status(400).json({ errores })
 
   const { usuarios } = await conectar()
@@ -471,7 +472,7 @@ app.post('/api/admin/usuarios', async (req, res) => {
 // Editar usuario: solo los campos que lleguen ({ email, nombre, rol, contrasena }).
 // La contraseña vacía o ausente no se cambia.
 app.patch('/api/admin/usuarios/:id', async (req, res) => {
-  const { datos, errores } = validarUsuario(req.body || {}, { nuevo: false })
+  const { datos, errores } = validarUsuario(req.body || {}, { nuevo: false, planes: await planesActivos() })
   if (Object.keys(errores).length > 0) return res.status(400).json({ errores })
   if (Object.keys(datos).length === 0) return res.status(400).json({ error: 'No hay cambios para guardar.' })
 

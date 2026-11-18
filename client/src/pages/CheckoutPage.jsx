@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import { buscarPlan, formatearPrecio, PLANES_APP } from '../../../shared/planes.mjs'
-import { reglasCompra } from '../../../shared/validacionCompra.mjs'
+import { buscarPlan, formatearPrecio, ID_PLANES, PLANES_APP } from '../../../shared/planes.mjs'
+import { crearReglasCompra } from '../../../shared/validacionCompra.mjs'
 import { avisos } from '../../../shared/validacionContacto.mjs'
 import { sendPurchase } from '../services/purchases.js'
 import './PlansPage.css'
@@ -13,6 +13,7 @@ import './CheckoutPage.css'
 const CAMPOS = ['plan', 'email', 'confirmEmail', 'celular', 'consentimiento']
 const ERROR_ENVIO = 'No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo.'
 const ERROR_CONFIRMACION = 'Los dos correos no coinciden.'
+const reglasCompra = crearReglasCompra(ID_PLANES)
 
 // Reglas de cada campo: las de shared/validacionCompra.mjs más la confirmación del correo
 function validarCampo(campo, valores) {
